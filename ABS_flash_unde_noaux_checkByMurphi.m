@@ -2083,721 +2083,887 @@ invariant "MemDataProp"
   Sta.MemData = Sta.CurrData);
 
 
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_1"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.Local = false);
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
-Invariant "rule_2"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.Local = false);
-Invariant "rule_3"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Local = false);
 
 
 ruleset i : NODE do
-Invariant "rule_4"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.Local = false);
+Invariant "rule_2"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
-ruleset j : NODE do
+ruleset i : NODE do
+Invariant "rule_3"
+	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_5"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.Local = false);
+	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Put);
 endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_6"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.Local = false);
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd != NODE_Get);
+endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_7"
-	(Sta.Dir.Local = false -> Sta.InvMsg[j].Cmd != INV_Inv);
+ruleset i : NODE do
+Invariant "rule_8"
+	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Proc[i].InvMarked = false);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_9"
-	(Sta.Dir.Local = false -> Sta.InvMsg[i].Cmd != INV_Inv);
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_10"
-	(Sta.Dir.Local = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
-Invariant "rule_11"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Local = false);
 
 
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_12"
-	(Sta.Dir.Local = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
+	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_13"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.Local = false);
+	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_14"
-	(Sta.Dir.Local = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
-Invariant "rule_15"
-	(Sta.Dir.Local = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+
+
+ruleset i : NODE do
 Invariant "rule_16"
-	(Sta.Dir.Local = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd = NODE_Get);
+endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_17"
-	(Sta.Dir.Local = true -> Sta.Proc[i].CacheState != CACHE_E);
+	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState != CACHE_E);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_18"
-	(Sta.Dir.Local = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
+ruleset i : NODE do
 Invariant "rule_19"
-	(Sta.Dir.Local = true -> Sta.WbMsg.Cmd != WB_Wb);
-
-
-ruleset i : NODE do
-Invariant "rule_22"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.Local = true);
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_20"
+	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_21"
+	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
 Invariant "rule_23"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.Local = true);
-endruleset;
-Invariant "rule_24"
-	(Sta.Dir.Local = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset i : NODE do
-Invariant "rule_26"
-	(Sta.Dir.Local = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_27"
-	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_28"
-	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_29"
 	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_30"
-	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].ProcCmd != NODE_GetX);
+Invariant "rule_24"
+	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState != CACHE_E);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_31"
-	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState = CACHE_I);
+Invariant "rule_25"
+	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState = CACHE_I);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_34"
-	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].ProcCmd != NODE_None);
+Invariant "rule_28"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_36"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_37"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_38"
-	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_39"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_40"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_42"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_45"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_48"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_51"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_52"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_53"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_54"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_55"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_56"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_58"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_60"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_61"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_64"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_65"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_66"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_67"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_68"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_70"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_71"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_73"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_75"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_77"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_78"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_80"
-	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_82"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_84"
-	(Sta.Dir.Dirty = false -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_87"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_88"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_89"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_90"
+Invariant "rule_29"
 	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_91"
-	(Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_PutX);
+Invariant "rule_30"
+	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_31"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_33"
+	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_34"
+	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_35"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_36"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_39"
+	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_40"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_41"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_42"
+	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_44"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_92"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+Invariant "rule_45"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_94"
-	(Sta.Dir.HeadVld = false -> Sta.UniMsg[j].Cmd != UNI_PutX);
+ruleset i : NODE do
+Invariant "rule_46"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_None);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_96"
-	(Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+ruleset i : NODE do
+Invariant "rule_47"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Data = Sta.CurrData);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_97"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[j].Cmd != UNI_PutX);
+ruleset i : NODE do
+Invariant "rule_49"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.Local = false);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_100"
-	(Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_101"
-	(Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+ruleset i : NODE do
+Invariant "rule_50"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.HeadVld = true);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_104"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_105"
-	(Sta.UniMsg[j].Data != Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_106"
-	(Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_108"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_111"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_PutX);
+Invariant "rule_51"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.InvSet[j] = false);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_113"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[j].Cmd != UNI_PutX);
+Invariant "rule_52"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_53"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.InvSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_115"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Cmd != UNI_PutX);
+Invariant "rule_54"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_Inv);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_116"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_PutX);
+ruleset i : NODE do
+Invariant "rule_55"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_56"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_58"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_59"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrVld = false);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_124"
+Invariant "rule_60"
 		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[j].Cmd != UNI_PutX);
 endruleset;
 
 
-ruleset i : NODE ; j : NODE do
-Invariant "rule_126"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_129"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_139"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_140"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_141"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_145"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_148"
-		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_158"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_159"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_160"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Proc != j);
-endruleset;
-Invariant "rule_163"
-	(Sta.Dir.Dirty = false -> Sta.MemData = Sta.CurrData);
-Invariant "rule_164"
-	(Sta.Dir.ShrVld = true -> Sta.MemData = Sta.CurrData);
-
-
-ruleset j : NODE do
-Invariant "rule_165"
-	(Sta.Dir.ShrSet[j] = true -> Sta.MemData = Sta.CurrData);
+ruleset i : NODE do
+Invariant "rule_61"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState = CACHE_I);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_166"
-	(Sta.Dir.ShrSet[i] = true -> Sta.MemData = Sta.CurrData);
-endruleset;
-Invariant "rule_171"
-	(Sta.MemData != Sta.CurrData -> Sta.Dir.Dirty = true);
-Invariant "rule_172"
-	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrVld = false);
-
-
-ruleset j : NODE do
-Invariant "rule_173"
-	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+Invariant "rule_62"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd = NODE_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_174"
-	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+Invariant "rule_63"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_179"
-	(Sta.Dir.Dirty = false -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_180"
-	(Sta.Dir.Dirty = false -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-Invariant "rule_181"
-	(Sta.Dir.Dirty = false -> Sta.WbMsg.Cmd != WB_Wb);
-Invariant "rule_182"
-	(Sta.Dir.ShrVld = true -> Sta.Dir.Dirty = false);
-
-
-ruleset j : NODE do
-Invariant "rule_183"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.Dirty = false);
+Invariant "rule_64"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_184"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.Dirty = false);
+Invariant "rule_66"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.Dirty = true);
 endruleset;
-Invariant "rule_188"
-	(Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
 
 
 ruleset i : NODE do
-Invariant "rule_190"
+Invariant "rule_67"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_68"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_69"
+	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_70"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_71"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_72"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_73"
+	(Sta.UniMsg[i].Data != Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_75"
+	(Sta.Dir.Local = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_76"
+	(Sta.Dir.HeadVld = false -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_77"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_78"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_79"
+	(Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_81"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_82"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_84"
+	(Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_85"
+	(Sta.Dir.ShrVld = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_86"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_87"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_88"
+	(Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_89"
+	(Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_90"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_92"
 	(Sta.Dir.Dirty = false -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_191"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.Dirty = true);
+Invariant "rule_93"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_94"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_95"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_192"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.Dirty = true);
+Invariant "rule_98"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.ShrSet[j] = false);
 endruleset;
-Invariant "rule_193"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.Dirty = true);
-Invariant "rule_194"
-	(Sta.Dir.Dirty = true -> Sta.Dir.ShrVld = false);
 
 
 ruleset j : NODE do
-Invariant "rule_195"
+Invariant "rule_99"
+	(Sta.Dir.Pending = true -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_100"
+	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_101"
+	(Sta.Dir.InvSet[j] = false -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_103"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_105"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_106"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_108"
+	(Sta.Dir.ShrVld = false -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_109"
+	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_110"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_111"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_113"
 	(Sta.Dir.Dirty = true -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_196"
-	(Sta.Dir.Dirty = true -> Sta.Dir.ShrSet[i] = false);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_114"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrSet[j] = false);
 endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_115"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_116"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_120"
+	(Sta.Dir.ShrSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_121"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.Pending = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_122"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_124"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.InvSet[j] = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_125"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_126"
+	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_127"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_128"
+	(Sta.Dir.ShrSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_130"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.ShrVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_131"
+	(Sta.Dir.ShrSet[j] = true -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_132"
+	(Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_133"
+	(Sta.Dir.ShrSet[j] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_135"
+	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.Dirty = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_136"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_137"
+	(Sta.Dir.ShrSet[j] = true -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_138"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_140"
+	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_141"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_142"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_144"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_145"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_147"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_148"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_149"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_150"
+	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_153"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_154"
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_156"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_157"
+	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_159"
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_160"
+	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_161"
+	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_162"
+	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_166"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_168"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_170"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_174"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_175"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_177"
+	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+Invariant "rule_199"
+	(Sta.Dir.Pending = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 Invariant "rule_200"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Dirty = true);
+	(Sta.Dir.Local = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+
+
+ruleset j : NODE do
+Invariant "rule_201"
+	(Sta.Dir.InvSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_202"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.Dirty = true);
-endruleset;
 Invariant "rule_203"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.Dir.InvSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_205"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.InvSet[i] = false);
-endruleset;
-Invariant "rule_206"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrVld = false);
-
-
-ruleset j : NODE do
-Invariant "rule_207"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrSet[j] = false);
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_208"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrSet[i] = false);
+	(Sta.Proc[i].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
 
 
 ruleset j : NODE do
 Invariant "rule_209"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.InvSet[j] = false);
+	(Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
-Invariant "rule_210"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.Pending = true);
-
-
-ruleset j : NODE do
-Invariant "rule_211"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_213"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_214"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
+Invariant "rule_212"
+	(Sta.Dir.ShrVld = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 Invariant "rule_215"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 
 
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_216"
-	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[j].Cmd != INV_InvAck);
+	(Sta.Dir.ShrSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_217"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_218"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
 Invariant "rule_219"
-	(Sta.Dir.InvSet[i] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_220"
-	(Sta.Dir.ShrVld = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-
-
-ruleset j : NODE do
-Invariant "rule_221"
-	(Sta.Dir.ShrSet[j] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_222"
-	(Sta.Dir.ShrSet[i] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_223"
-	(Sta.Dir.InvSet[j] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
 Invariant "rule_224"
-	(Sta.Dir.Pending = false -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-
-
-ruleset i : NODE do
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+Invariant "rule_225"
+	(Sta.ShWbMsg.Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
 Invariant "rule_227"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Pending = true);
 Invariant "rule_228"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-Invariant "rule_229"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Local = false);
 
 
 ruleset j : NODE do
-Invariant "rule_233"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState != CACHE_S);
+Invariant "rule_229"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.InvSet[j] = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_234"
+Invariant "rule_231"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_232"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_233"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[i].Cmd != UNI_Put);
 endruleset;
 
 
@@ -2811,8531 +2977,8365 @@ ruleset j : NODE do
 Invariant "rule_237"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].InvMarked = false);
 endruleset;
-
-
-ruleset i : NODE do
 Invariant "rule_238"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-Invariant "rule_239"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.ShrVld = false);
-
-
-ruleset j : NODE do
-Invariant "rule_240"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.ShrSet[j] = false);
-endruleset;
+Invariant "rule_241"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.NakcMsg.Cmd != NAKC_Nakc);
 
 
 ruleset i : NODE do
-Invariant "rule_241"
+Invariant "rule_242"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_242"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_243"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-Invariant "rule_244"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Pending = true);
-
-
-ruleset j : NODE do
-Invariant "rule_245"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_247"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_248"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[i].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_249"
+Invariant "rule_244"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[i].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_250"
+Invariant "rule_245"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_246"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_248"
 	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_254"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_255"
-	(Sta.Dir.InvSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_257"
-	(Sta.Proc[i].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+Invariant "rule_249"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset j : NODE do
+Invariant "rule_252"
+	(Sta.Dir.Pending = false -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+Invariant "rule_253"
+	(Sta.Dir.Pending = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_255"
+	(Sta.Dir.ShrVld = true -> Sta.Dir.Pending = false);
+Invariant "rule_257"
+	(Sta.Dir.Pending = false -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+
+
+ruleset i : NODE do
 Invariant "rule_258"
-	(Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.Pending = false);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_259"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.Dir.Pending = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
 endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_260"
-	(Sta.Dir.ShrVld = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.Dir.Pending = false -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
 
 
 ruleset j : NODE do
 Invariant "rule_261"
-	(Sta.Dir.ShrSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+	(Sta.Dir.Pending = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
-Invariant "rule_262"
-	(Sta.ShWbMsg.Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-
-
-ruleset i : NODE do
-Invariant "rule_264"
-	(Sta.Dir.ShrSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_266"
-	(Sta.Dir.InvSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
+Invariant "rule_265"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Pending = true);
 Invariant "rule_267"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-Invariant "rule_268"
-	(Sta.Dir.Pending = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-
-
-ruleset i : NODE do
-Invariant "rule_271"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_272"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_273"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_280"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_281"
-	(Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_284"
-	(Sta.Proc[j].CacheData = Sta.CurrData -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_285"
-	(Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_290"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_291"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_292"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_293"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_294"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_295"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_296"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_298"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_299"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_300"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_301"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_302"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_303"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_304"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_306"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_307"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_308"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_309"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_310"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_311"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_312"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_313"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_314"
-	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_315"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_316"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_317"
-	(Sta.Dir.InvSet[i] = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_318"
-	(Sta.Dir.HeadVld = false -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_319"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_320"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_321"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_323"
-	(Sta.Dir.ShrVld = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_324"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_325"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_326"
-	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_327"
-	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_328"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_331"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_332"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_333"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_334"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_335"
-	(Sta.Proc[i].CacheData != Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_337"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_339"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_340"
-	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_341"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_342"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_343"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_344"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_346"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_348"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_349"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_352"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_353"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_354"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_355"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_356"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_357"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_358"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_360"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_362"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_364"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_366"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_367"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_369"
-	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_370"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_371"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_372"
-	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_373"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_374"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_376"
-	(Sta.Dir.HeadVld = false -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_378"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_379"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_382"
-	(Sta.Dir.ShrVld = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_383"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_386"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_387"
-	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_388"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_389"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_391"
-	(Sta.Dir.InvSet[j] = true -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_392"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_396"
-	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_398"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_400"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_401"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_408"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_409"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_410"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_411"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_412"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_413"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_414"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_415"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_418"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_419"
-	(Sta.Proc[j].CacheState = CACHE_S -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_420"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_421"
-	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_422"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_423"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_424"
-	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_425"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_426"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_428"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_431"
-	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_433"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_434"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_435"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_436"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_439"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_440"
-	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_442"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_443"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_444"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_445"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_446"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_449"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_450"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_453"
-	(Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_454"
-	(Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_455"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_456"
-	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_457"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_458"
-	(Sta.Proc[j].ProcCmd = NODE_Get -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_462"
-	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_463"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_464"
-	(Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_465"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_469"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_470"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_471"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_472"
-	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_476"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_477"
-	(Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_479"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_480"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_484"
-	(Sta.Dir.InvSet[i] = true -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_486"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.InvSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_487"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_489"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.InvSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_490"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.InvSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_491"
-	(Sta.Dir.InvSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_492"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_493"
-	(Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_494"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_496"
-	(Sta.Dir.InvSet[i] = false -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_499"
-	(Sta.Dir.InvSet[i] = false -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_500"
-	(Sta.Dir.InvSet[i] = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_501"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_503"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_504"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_506"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_507"
-	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_508"
-	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_511"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_512"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_514"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_516"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_517"
-	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_518"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_519"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_521"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_522"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_523"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_526"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_527"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_529"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_530"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_531"
-	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_532"
-	(Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_536"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-Invariant "rule_541"
-	(Sta.Dir.HeadVld = false -> Sta.WbMsg.Cmd != WB_Wb);
-Invariant "rule_543"
-	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrVld = false);
-
-
-ruleset j : NODE do
-Invariant "rule_544"
-	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_545"
-	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_549"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_550"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadVld = false);
-endruleset;
-Invariant "rule_551"
-	(Sta.Dir.HeadVld = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset i : NODE do
-Invariant "rule_554"
-	(Sta.Dir.HeadVld = false -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-Invariant "rule_555"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.HeadVld = true);
-Invariant "rule_557"
-	(Sta.Dir.ShrVld = true -> Sta.Dir.HeadVld = true);
-
-
-ruleset j : NODE do
-Invariant "rule_558"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_559"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_561"
-	(Sta.Dir.HeadVld = true -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_563"
-	(Sta.Dir.HeadVld = true -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_564"
-	(Sta.Dir.HeadVld = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-Invariant "rule_565"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.HeadVld = true);
-
-
-ruleset j : NODE do
-Invariant "rule_566"
-	(Sta.Dir.HeadVld = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_567"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_570"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_571"
-	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_574"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_576"
-	(Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_579"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_580"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_583"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_584"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_587"
-	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_590"
-	(Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_591"
-	(Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_592"
-	(Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_593"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_596"
-	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_598"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_599"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_602"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.Proc[j].InvMarked = false);
-endruleset;
-Invariant "rule_606"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrVld = false);
-
-
-ruleset j : NODE do
-Invariant "rule_607"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_608"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_609"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_610"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_612"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_614"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-Invariant "rule_615"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset j : NODE do
-Invariant "rule_616"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-Invariant "rule_617"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.WbMsg.Data = Sta.CurrData);
-
-
-ruleset i : NODE do
-Invariant "rule_618"
-	(Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-Invariant "rule_621"
-	(Sta.Dir.ShrVld = true -> Sta.WbMsg.Cmd != WB_Wb);
-
-
-ruleset j : NODE do
-Invariant "rule_622"
-	(Sta.Dir.ShrSet[j] = true -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_623"
-	(Sta.Dir.ShrSet[i] = true -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_624"
-	(Sta.Dir.InvSet[j] = true -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_627"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_629"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-Invariant "rule_630"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.WbMsg.Cmd != WB_Wb);
-Invariant "rule_636"
-	(Sta.WbMsg.Data != Sta.CurrData -> Sta.WbMsg.Cmd != WB_Wb);
-
-
-ruleset i : NODE do
-Invariant "rule_637"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_638"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_639"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_642"
-	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_645"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_646"
-	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_649"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_656"
-		(i != j) ->	(Sta.Dir.HeadPtr = i -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_658"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_659"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_661"
-		(i != j) ->	(Sta.Dir.HeadPtr = i -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_669"
-	(Sta.Dir.HeadPtr != i -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_670"
-	(Sta.Dir.HeadPtr != i -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_674"
-	(Sta.Dir.ShrVld = false -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_675"
-	(Sta.Dir.ShrVld = false -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-Invariant "rule_677"
 	(Sta.Dir.Pending = true -> Sta.Dir.ShrVld = false);
+Invariant "rule_269"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.Pending = true);
 
 
 ruleset i : NODE do
-Invariant "rule_680"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_681"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrVld = false);
-endruleset;
-Invariant "rule_682"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrVld = false);
-
-
-ruleset i : NODE do
-Invariant "rule_685"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_686"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.ShrVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_687"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.ShrVld = true);
-endruleset;
-Invariant "rule_689"
-	(Sta.Dir.ShrVld = true -> Sta.Dir.Pending = false);
-
-
-ruleset j : NODE do
-Invariant "rule_690"
-	(Sta.Dir.ShrVld = true -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_692"
-	(Sta.Dir.ShrVld = true -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_693"
-	(Sta.Dir.ShrVld = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-Invariant "rule_694"
-	(Sta.Dir.ShrVld = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset j : NODE do
-Invariant "rule_695"
-	(Sta.Dir.ShrVld = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_696"
-	(Sta.Dir.ShrVld = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_698"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.InvSet[j] = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_699"
-	(Sta.Dir.ShrSet[j] = true -> Sta.Dir.Pending = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_700"
-	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_702"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_703"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_704"
-	(Sta.Dir.ShrSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_705"
-	(Sta.Dir.ShrSet[j] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_706"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_708"
-	(Sta.Dir.InvSet[j] = false -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_710"
-	(Sta.Dir.Pending = true -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_713"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_714"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_715"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_718"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-Invariant "rule_721"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.ShWbMsg.Data = Sta.CurrData);
-Invariant "rule_725"
-	(Sta.ShWbMsg.Data != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset i : NODE do
-Invariant "rule_727"
+Invariant "rule_270"
 	(Sta.Dir.Pending = true -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_730"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrSet[i] = false);
+Invariant "rule_271"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.Pending = true);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_731"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_732"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_736"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_738"
-	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.Pending = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_739"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_741"
-	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_742"
-	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_743"
-	(Sta.Dir.ShrSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_744"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_745"
-	(Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_749"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_750"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_752"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_753"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_754"
-	(Sta.Proc[i].ProcCmd = NODE_None -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_757"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_758"
-	(Sta.Proc[i].ProcCmd != NODE_None -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_760"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_761"
-	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_762"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_763"
-	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_766"
-	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_768"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_770"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_773"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_777"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_778"
-	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_780"
-	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_781"
-	(Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_784"
-	(Sta.Proc[i].ProcCmd != NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_785"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_787"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_788"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_789"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_792"
-	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_794"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_796"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_799"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_801"
-	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_815"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_816"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_817"
-	(Sta.Dir.InvSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_819"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_821"
-	(Sta.Dir.InvSet[j] = false -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_823"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_824"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_825"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_826"
-	(Sta.Dir.InvSet[j] = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_828"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_829"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_832"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_834"
-	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_835"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_838"
-	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_840"
-	(Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_841"
-	(Sta.Dir.Pending = false -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_843"
-	(Sta.Dir.Pending = false -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_844"
-	(Sta.Dir.Pending = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-Invariant "rule_845"
-	(Sta.Dir.Pending = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-
-
-ruleset j : NODE do
-Invariant "rule_846"
-	(Sta.Dir.Pending = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_849"
+Invariant "rule_272"
 	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.Pending = true);
 endruleset;
 
 
+ruleset j : NODE do
+Invariant "rule_274"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_275"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_276"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_279"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_280"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_283"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_284"
+	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_285"
+	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_286"
+	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_289"
+	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_291"
+	(Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_292"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_293"
+	(Sta.Dir.Local = false -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
 ruleset i : NODE do
-Invariant "rule_850"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.Pending = true);
+Invariant "rule_294"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.Local = false);
 endruleset;
-Invariant "rule_851"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Pending = true);
+Invariant "rule_295"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Local = false);
 
 
 ruleset j : NODE do
-Invariant "rule_855"
-	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState = CACHE_I);
+Invariant "rule_297"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.Local = false);
 endruleset;
+Invariant "rule_298"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.Local = false);
 
 
-ruleset j : NODE ; i : NODE do
-Invariant "rule_857"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState = CACHE_I);
+ruleset i : NODE do
+Invariant "rule_299"
+	(Sta.Dir.Local = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_300"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.Local = false);
+
+
+ruleset i : NODE do
+Invariant "rule_301"
+	(Sta.Dir.Local = false -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_860"
+Invariant "rule_302"
+	(Sta.Dir.Local = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_303"
+	(Sta.Dir.Local = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_305"
+	(Sta.Dir.Local = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+Invariant "rule_306"
+	(Sta.Dir.Local = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+
+
+ruleset j : NODE do
+Invariant "rule_308"
+	(Sta.Dir.Local = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+Invariant "rule_309"
+	(Sta.Dir.Local = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+
+
+ruleset i : NODE do
+Invariant "rule_310"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.Local = true);
+endruleset;
+Invariant "rule_311"
+	(Sta.Dir.Local = true -> Sta.WbMsg.Cmd != WB_Wb);
+
+
+ruleset i : NODE do
+Invariant "rule_312"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_314"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_315"
 	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].ProcCmd = NODE_None);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_861"
-	(Sta.Proc[j].CacheState != CACHE_I -> Sta.InvMsg[j].Cmd != INV_InvAck);
+Invariant "rule_318"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_319"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_320"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_321"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_322"
+	(Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_324"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_325"
+	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_326"
+	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_329"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_330"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_331"
+	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_332"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_333"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_335"
+	(Sta.Proc[j].ProcCmd != NODE_None -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_337"
+	(Sta.Dir.HeadVld = false -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_339"
+	(Sta.Dir.HeadVld = false -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+Invariant "rule_340"
+	(Sta.Dir.HeadVld = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_342"
+	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrVld = false);
+
+
+ruleset j : NODE do
+Invariant "rule_343"
+	(Sta.Dir.HeadVld = false -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_344"
+	(Sta.Dir.HeadVld = false -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_346"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadVld = false);
+endruleset;
+Invariant "rule_347"
+	(Sta.Dir.HeadVld = false -> Sta.WbMsg.Cmd != WB_Wb);
+
+
+ruleset i : NODE do
+Invariant "rule_348"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadVld = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_351"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_352"
+	(Sta.Dir.HeadVld = true -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_353"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.HeadVld = true);
+endruleset;
+Invariant "rule_354"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.HeadVld = true);
+Invariant "rule_356"
+	(Sta.Dir.ShrVld = true -> Sta.Dir.HeadVld = true);
+
+
+ruleset j : NODE do
+Invariant "rule_357"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_358"
+	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_360"
+	(Sta.Dir.HeadVld = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_361"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.HeadVld = true);
+
+
+ruleset i : NODE do
+Invariant "rule_362"
+	(Sta.Dir.HeadVld = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_363"
+	(Sta.Dir.HeadVld = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_364"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_365"
+	(Sta.Dir.InvSet[j] = false -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_366"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_367"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_371"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_372"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_375"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_376"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_377"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_380"
+	(Sta.Dir.InvSet[j] = false -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_381"
+	(Sta.Dir.InvSet[j] = true -> Sta.Proc[j].CacheState != CACHE_E);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_862"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_383"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.Proc[i].CacheState != CACHE_E);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_864"
-	(Sta.Dir.HeadPtr != j -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_871"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_875"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.InvMsg[j].Cmd != INV_Inv);
+Invariant "rule_384"
+	(Sta.Dir.InvSet[j] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_877"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[j].Cmd != INV_Inv);
+Invariant "rule_388"
+	(Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_389"
+	(Sta.Dir.InvSet[j] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_885"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_891"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_903"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadPtr != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_907"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadPtr != j);
+Invariant "rule_392"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_916"
-	(Sta.Dir.HeadPtr != j -> Sta.InvMsg[j].Cmd != INV_InvAck);
+Invariant "rule_393"
+	(Sta.Dir.InvSet[j] = true -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_394"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_937"
-	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState != CACHE_S);
+Invariant "rule_414"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_939"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Get);
+Invariant "rule_416"
+	(Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_941"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+Invariant "rule_417"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_943"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_944"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.InvMsg[j].Cmd != INV_InvAck);
+Invariant "rule_418"
+	(Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_945"
-	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_946"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_948"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_949"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_951"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_952"
-	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_953"
+Invariant "rule_419"
 	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_954"
+Invariant "rule_422"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_424"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_425"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_426"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_427"
+	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_429"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_430"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_431"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_434"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_435"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_436"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_437"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_442"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_443"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_446"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_447"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_450"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_453"
+	(Sta.Dir.ShrVld = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_454"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_455"
+	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_457"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_459"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_462"
+	(Sta.Dir.Dirty = false -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_463"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_465"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_466"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_467"
+	(Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_468"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_469"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_471"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_476"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_477"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_479"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_480"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_483"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_484"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_485"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_486"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_488"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_490"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_493"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_494"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_496"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_497"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_498"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_499"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_500"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_502"
+	(Sta.Proc[j].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_505"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_506"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_507"
+	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_508"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_509"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_510"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_511"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_516"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_517"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_518"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_519"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_520"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_521"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_522"
+	(Sta.Proc[j].CacheState != CACHE_I -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_525"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_530"
+	(Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_533"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_534"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_536"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_537"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_538"
+	(Sta.Dir.InvSet[i] = false -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_540"
+	(Sta.Dir.InvSet[i] = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_541"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_542"
+	(Sta.Dir.InvSet[i] = false -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_545"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_546"
+	(Sta.Dir.InvSet[i] = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_547"
+	(Sta.Dir.InvSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_549"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_550"
+	(Sta.Dir.InvSet[i] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_551"
+	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.InvSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_553"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.InvSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_554"
+	(Sta.Dir.InvSet[i] = true -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_555"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.InvSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_557"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_559"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_561"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_562"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_563"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_566"
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_568"
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_569"
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_570"
+	(Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_575"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_577"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_578"
+	(Sta.Dir.HeadPtr != j -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_587"
+	(Sta.Dir.ShrVld = true -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_591"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_601"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_603"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_606"
+		(i != j) ->	(Sta.Dir.HeadPtr = i -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_611"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_615"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_627"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.InvMsg[j].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_638"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_642"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_643"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_644"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_646"
+	(Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_648"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_652"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_653"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_654"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_656"
+	(Sta.UniMsg[i].Cmd = UNI_Put -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_658"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_660"
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_661"
+	(Sta.Proc[i].CacheData != Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_662"
+	(Sta.Dir.ShrVld = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_663"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_664"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_665"
+	(Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_667"
+	(Sta.Dir.Dirty = false -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_668"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_669"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_670"
+	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_671"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_672"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_674"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_676"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_677"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_678"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_679"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_680"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_681"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_683"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_684"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_685"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_686"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_687"
+	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_688"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_689"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_693"
+	(Sta.Dir.ShrVld = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+
+
+ruleset j : NODE do
+Invariant "rule_694"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+Invariant "rule_695"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+
+
+ruleset i : NODE do
+Invariant "rule_696"
+	(Sta.Dir.ShrSet[i] = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+Invariant "rule_698"
+	(Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+
+
+ruleset i : NODE do
+Invariant "rule_699"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+Invariant "rule_701"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+
+
+ruleset i : NODE do
+Invariant "rule_702"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+Invariant "rule_706"
+	(Sta.ShWbMsg.Data != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_709"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrVld = false);
+
+
+ruleset j : NODE do
+Invariant "rule_710"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+Invariant "rule_711"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+
+
+ruleset i : NODE do
+Invariant "rule_712"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+Invariant "rule_714"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Dir.Dirty = true);
+
+
+ruleset i : NODE do
+Invariant "rule_715"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_717"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.WbMsg.Cmd != WB_Wb);
+
+
+ruleset i : NODE do
+Invariant "rule_718"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_720"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_721"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.ShWbMsg.Data = Sta.CurrData);
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_751"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadPtr != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_767"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadPtr != j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_774"
+	(Sta.Dir.HeadPtr != j -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_780"
+	(Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_783"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_784"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_786"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_790"
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_791"
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_793"
+	(Sta.Proc[i].InvMarked = true -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_796"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_797"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_798"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_799"
+	(Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_802"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_803"
+	(Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_804"
+	(Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_805"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_807"
+	(Sta.Proc[j].InvMarked = true -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_809"
+	(Sta.Proc[i].CacheData = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_817"
+	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrVld = false);
+
+
+ruleset j : NODE do
+Invariant "rule_818"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrVld = false);
+endruleset;
+Invariant "rule_819"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrVld = false);
+
+
+ruleset i : NODE do
+Invariant "rule_820"
+	(Sta.Dir.ShrVld = false -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+Invariant "rule_822"
+	(Sta.Dir.Dirty = true -> Sta.Dir.ShrVld = false);
+
+
+ruleset i : NODE do
+Invariant "rule_823"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrVld = false);
+endruleset;
+Invariant "rule_824"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrVld = false);
+
+
+ruleset i : NODE do
+Invariant "rule_825"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrVld = false);
+endruleset;
+Invariant "rule_828"
+	(Sta.Dir.ShrVld = true -> Sta.MemData = Sta.CurrData);
+
+
+ruleset j : NODE do
+Invariant "rule_829"
+	(Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+Invariant "rule_830"
+	(Sta.Dir.ShrVld = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+
+
+ruleset i : NODE do
+Invariant "rule_831"
+	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.ShrVld = true);
+endruleset;
+Invariant "rule_833"
+	(Sta.Dir.ShrVld = true -> Sta.Dir.Dirty = false);
+
+
+ruleset i : NODE do
+Invariant "rule_834"
+	(Sta.Dir.ShrVld = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+Invariant "rule_835"
+	(Sta.Dir.ShrVld = true -> Sta.WbMsg.Cmd != WB_Wb);
+
+
+ruleset i : NODE do
+Invariant "rule_836"
+	(Sta.Dir.ShrVld = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_838"
+	(Sta.Dir.ShrVld = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_839"
+	(Sta.MemData != Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+Invariant "rule_840"
+	(Sta.MemData != Sta.CurrData -> Sta.Dir.Dirty = true);
+
+
+ruleset i : NODE do
+Invariant "rule_842"
+	(Sta.Dir.ShrSet[i] = true -> Sta.MemData = Sta.CurrData);
+endruleset;
+Invariant "rule_843"
+	(Sta.Dir.Dirty = false -> Sta.MemData = Sta.CurrData);
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_847"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_850"
+	(Sta.Dir.Dirty = false -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_851"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_853"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_854"
+	(Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_855"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_857"
+	(Sta.UniMsg[j].Data != Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_859"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_864"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_867"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_868"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_870"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_871"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_872"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_874"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_875"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_876"
+	(Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_877"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_880"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_882"
+	(Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_883"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_884"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_886"
+	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_887"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_889"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_890"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_892"
+	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_893"
+		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_I -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_895"
+	(Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_897"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_899"
+	(Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_900"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_903"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_904"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_906"
+	(Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_907"
+	(Sta.Dir.ShrSet[i] = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_908"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_909"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_911"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_912"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_913"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_914"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_916"
+	(Sta.Dir.Dirty = true -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_917"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_918"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_920"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_924"
+	(Sta.Dir.ShrSet[i] = true -> Sta.Dir.Dirty = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_925"
+	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_926"
+	(Sta.Dir.ShrSet[i] = true -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_928"
+	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_930"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_931"
 	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_956"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_958"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_959"
+Invariant "rule_933"
 	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].CacheState != CACHE_S);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_960"
-	(Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[i].CacheState != CACHE_S);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_934"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.Proc[i].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_961"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_936"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_938"
+	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Cmd != UNI_Nak);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_962"
+Invariant "rule_939"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_941"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_943"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_944"
+		(i != j) ->	(Sta.Dir.HeadPtr = i -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_945"
+	(Sta.Dir.HeadPtr != i -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_947"
+	(Sta.Dir.HeadPtr != i -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+Invariant "rule_949"
+	(Sta.Dir.Dirty = false -> Sta.WbMsg.Cmd != WB_Wb);
+Invariant "rule_951"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.Dir.Dirty = true);
+
+
+ruleset i : NODE do
+Invariant "rule_953"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_954"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_956"
+	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_957"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_958"
 		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_961"
+	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
 Invariant "rule_963"
-	(Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_964"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
+	(Sta.WbMsg.Data != Sta.CurrData -> Sta.WbMsg.Cmd != WB_Wb);
 
 
 ruleset i : NODE do
 Invariant "rule_965"
-	(Sta.Proc[i].CacheData = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
+Invariant "rule_967"
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.WbMsg.Data = Sta.CurrData);
 
 
-ruleset i : NODE do
+ruleset j : NODE do
 Invariant "rule_968"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+	(Sta.WbMsg.Cmd = WB_Wb -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_970"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.InvMsg[j].Cmd != INV_InvAck);
+Invariant "rule_969"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].ProcCmd != NODE_GetX);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_971"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[i].Cmd != UNI_PutX);
+ruleset j : NODE do
+Invariant "rule_972"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].ProcCmd != NODE_GetX);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_977"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+ruleset j : NODE do
+Invariant "rule_973"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Put);
 endruleset;
 
 
-ruleset j : NODE ; i : NODE do
-Invariant "rule_984"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i -> Sta.InvMsg[j].Cmd != INV_InvAck);
+ruleset j : NODE do
+Invariant "rule_975"
+	(Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_976"
+	(Sta.Proc[j].CacheData = Sta.CurrData -> Sta.InvMsg[j].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_983"
+	(Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_985"
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Put);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_990"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.InvMsg[j].Cmd != INV_InvAck);
+Invariant "rule_986"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_996"
-	(Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Data = Sta.CurrData);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_988"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Proc != j);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_997"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_989"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_998"
-	(Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+ruleset j : NODE do
+Invariant "rule_993"
+	(Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_S);
 endruleset;
 
 
-ruleset i : NODE do
+ruleset j : NODE do
 Invariant "rule_999"
-	(Sta.UniMsg[i].Data != Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1002"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1006"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1009"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1010"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1011"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Dir.Local = false);
+	(Sta.Proc[j].CacheState = CACHE_S -> Sta.InvMsg[j].Cmd != INV_InvAck);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_1020"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.MemData = Sta.CurrData);
+Invariant "rule_1005"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1006"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1008"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1009"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1010"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1011"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_1024"
-	(Sta.Dir.Local = false & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd != UNI_Get -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_1027"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Dirty = false);
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_1031"
-	(Sta.Dir.Dirty = true & Sta.Dir.Local = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
 Invariant "rule_1034"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.Local = false);
+	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Nak);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_1035"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1036"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset i : NODE do
+ruleset i : NODE ; j : NODE do
 Invariant "rule_1037"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.HeadVld = true);
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_1038"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
 Invariant "rule_1039"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1040"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1041"
-	(Sta.Dir.Local = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = false);
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_1043"
-	(Sta.Dir.HeadVld = false & Sta.Dir.Local = false -> Sta.Dir.InvSet[i] = false);
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_1045"
-	(Sta.Dir.Local = false & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
+Invariant "rule_1044"
+	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_1046"
-	(Sta.Dir.Local = false & Sta.Dir.ShrSet[i] = false -> Sta.Dir.InvSet[i] = false);
+	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_1047"
-	(Sta.Dir.Local = false & Sta.Dir.Pending = true -> Sta.Dir.InvSet[i] = false);
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_1051"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.Local = false);
+Invariant "rule_1048"
+	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_1052"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.Local = false);
+Invariant "rule_1049"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_Get);
 endruleset;
 
 
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1053"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1054"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.Local = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1055"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.Local = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1056"
-		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1062"
-		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1067"
-		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1068"
-		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1069"
-		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1071"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.Dir.Local = true -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1072"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.Dir.Local = true -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1073"
-		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1074"
-		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1075"
-	(Sta.MemData != Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1079"
-	(Sta.Dir.Dirty = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1083"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Local = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1084"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Local = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1085"
-	(Sta.Dir.HeadVld = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1087"
-	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1088"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1089"
-	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = true -> Sta.Dir.Local = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1093"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Local = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1094"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.Local = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1095"
-		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1096"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Local = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1101"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1102"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1103"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1104"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1106"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1108"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1109"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1110"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1111"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1112"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1118"
-	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd = UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1119"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1120"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1121"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1122"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1123"
-	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1125"
-	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1126"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1127"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1129"
-	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1130"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1131"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1132"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1133"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1134"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1135"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1136"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1137"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1138"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1139"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1140"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.Pending = false -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1141"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1142"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1143"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1144"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1145"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1146"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1147"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1148"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1149"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1151"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1152"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1156"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1157"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1159"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1161"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1162"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1163"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1164"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1165"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1172"
-	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1173"
-	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1174"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1175"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1176"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1178"
-	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1179"
-	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1180"
-	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1181"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1182"
-		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1183"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1184"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1185"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1186"
-		(j != i) ->	(Sta.Dir.Pending = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1187"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1188"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1189"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1190"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1192"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1194"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1195"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1196"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_PutX -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1198"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1199"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1200"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd != UNI_PutX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1202"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_PutX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1203"
-		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1204"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1208"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1209"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_PutX -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1217"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Dirty = false -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1219"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Dirty = false -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1222"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1224"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1226"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1227"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1228"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1230"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1231"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1234"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1235"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1238"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1240"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1241"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1246"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1247"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1255"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1273"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1275"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1276"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1277"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1279"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1281"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1282"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1283"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1284"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1286"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1288"
-		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1290"
-		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1295"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1296"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1297"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1298"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1299"
-		(i != j) ->	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1300"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1301"
-		(i != j) ->	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1306"
-		(i != j) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1316"
-		(i != j) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1323"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1330"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1334"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1335"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1336"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1337"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1338"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1342"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1343"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1345"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1346"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1347"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1351"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1352"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1354"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1355"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1356"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1359"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1360"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1364"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1365"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1366"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1367"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1368"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1369"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1370"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1372"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1373"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1374"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1375"
-		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1377"
-		(i != j) ->	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1378"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1380"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1381"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1382"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1383"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.ShWbMsg.Proc = i -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1384"
-		(i != j) ->	(Sta.UniMsg[i].Data != Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1386"
-		(i != j) ->	(Sta.UniMsg[i].Cmd != UNI_PutX & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1387"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1388"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1390"
-		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1391"
-		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1404"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1414"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1415"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1416"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1417"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1419"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1420"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1421"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1422"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1424"
-		(i != j) ->	(Sta.Dir.Pending = false & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1425"
-		(i != j) ->	(Sta.Dir.Pending = false & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1427"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[i].Proc = j -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1428"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1430"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1433"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1435"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1436"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1441"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1445"
-		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1462"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.Dir.Dirty = false -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1463"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Dir.Dirty = false -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1468"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1469"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1472"
-		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1474"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1475"
-		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1480"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1481"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1491"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1511"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1513"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1514"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.Proc[j].CacheState = CACHE_S -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1515"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1517"
-		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1519"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1525"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1526"
-		(i != j) ->	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1527"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1528"
-		(i != j) ->	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1530"
-		(i != j) ->	(Sta.Dir.HeadVld = false & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1531"
-		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1547"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1548"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1549"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1553"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1554"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1556"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1557"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1558"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1562"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1564"
-		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1566"
-		(i != j) ->	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1567"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1569"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1570"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1571"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1572"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1573"
-		(i != j) ->	(Sta.UniMsg[i].Data != Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1574"
-		(i != j) ->	(Sta.UniMsg[i].Cmd != UNI_PutX & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1575"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1576"
-		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1582"
-		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1584"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1600"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1610"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Get & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1611"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1612"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1613"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1615"
-		(i != j) ->	(Sta.Dir.Pending = false & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1616"
-		(i != j) ->	(Sta.Dir.Pending = false & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1618"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.Proc[j].CacheState != CACHE_I -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1620"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1628"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[i].Proc != j);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1640"
-	(Sta.Dir.HeadVld = true & Sta.Dir.InvSet[i] = true -> Sta.MemData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1641"
-	(Sta.Dir.Pending = false & Sta.Dir.InvSet[i] = true -> Sta.MemData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1642"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.MemData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1645"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.MemData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1646"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.MemData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1654"
-	(Sta.MemData != Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1655"
-	(Sta.MemData != Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1656"
-	(Sta.Dir.HeadVld = true & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1657"
-	(Sta.Dir.Pending = false & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1658"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1663"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1664"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1669"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.Dirty = false -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1670"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.Dirty = false -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1671"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1673"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1674"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1675"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1676"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1677"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1678"
-	(Sta.Dir.HeadVld = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.Dirty = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1679"
-	(Sta.Dir.Pending = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Dirty = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1680"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1683"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1691"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1693"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1694"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1695"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1696"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1697"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1698"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1699"
-	(Sta.Dir.Dirty = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1700"
-	(Sta.Dir.Dirty = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1701"
-	(Sta.Dir.Dirty = true & Sta.Dir.HeadVld = true -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1702"
-	(Sta.Dir.Dirty = true & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1703"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1704"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1709"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.Dirty = true);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1718"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1719"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1720"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1721"
-	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1722"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1723"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1724"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1727"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1729"
-	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1730"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1738"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1739"
-	(Sta.Dir.HeadPtr = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1742"
-		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1745"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1748"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1749"
-	(Sta.Proc[i].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1750"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1753"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1754"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1755"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1756"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1757"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1759"
-	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1760"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1763"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1764"
-	(Sta.Dir.HeadPtr = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1767"
-		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1770"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1773"
-	(Sta.Dir.HeadPtr = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1774"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1777"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1778"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1782"
-		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1783"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1795"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1796"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1813"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Proc[j].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1814"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Proc[j].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1815"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.Proc[j].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1818"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1821"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1826"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1827"
-	(Sta.Proc[i].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1830"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1833"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1836"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1837"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1839"
-	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1842"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1845"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_1848"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1851"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1857"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1866"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1875"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1876"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1877"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1878"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1879"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1880"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1881"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1882"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Proc = j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1883"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1892"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1899"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1900"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1901"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1903"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1905"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1906"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1907"
-	(Sta.Dir.HeadVld = false & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1908"
-		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1909"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1910"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1911"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1912"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1913"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1914"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1915"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1916"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1917"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1918"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1919"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadPtr = i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1920"
-		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.HeadPtr != i -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1921"
-		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.HeadPtr != i -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1922"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1923"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1925"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1926"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1928"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1929"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Proc = j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1930"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1931"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Proc = i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1932"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1934"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc != j -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1935"
-		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc = i -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1936"
-	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.ShWbMsg.Proc = j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1937"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].CacheState != CACHE_I -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1938"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1939"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1940"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc = j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1941"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc != j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1942"
-		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1943"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1944"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1945"
-	(Sta.Dir.HeadVld = false & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1946"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1947"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1948"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1949"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1950"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1951"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1959"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1966"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_E -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1967"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1968"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1970"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1972"
-		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1973"
-	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1974"
-	(Sta.Dir.HeadVld = false & Sta.Proc[j].CacheState != CACHE_I -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1975"
-		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1976"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1977"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1978"
-		(j != i) ->	(Sta.WbMsg.Cmd = WB_Wb & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1979"
-		(i != j) ->	(Sta.Dir.HeadPtr != i & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1980"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_1981"
-		(i != j) ->	(Sta.Dir.HeadPtr != i & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1982"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1984"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1986"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1987"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1988"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1989"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Proc != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1991"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1992"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1993"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1994"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_1995"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1996"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState = CACHE_S -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_1999"
-	(Sta.Proc[j].CacheState = CACHE_S & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2000"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2002"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2004"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2006"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2007"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2008"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2009"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2010"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2012"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2013"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2014"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2020"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2021"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2022"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2023"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2024"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2025"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2026"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2027"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2028"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2029"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2030"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2037"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2038"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2039"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2040"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2041"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2042"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2044"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2045"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2046"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2047"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2048"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2049"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2051"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2052"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2061"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].CacheState = CACHE_I -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2062"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2063"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2065"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2067"
-	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_None -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2068"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2069"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2070"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2071"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2074"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2075"
-		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2077"
-	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.Proc[j].CacheState = CACHE_S -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2079"
-	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.Proc[j].CacheState = CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2081"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2083"
-	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2111"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2118"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2142"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2160"
-	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2162"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2182"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[i].CacheState = CACHE_E -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2183"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[i].CacheState = CACHE_E -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2184"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2185"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2188"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[i].CacheState != CACHE_E);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2193"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState = CACHE_S -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2194"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].CacheState = CACHE_S -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2201"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[j].CacheState = CACHE_S -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2202"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].CacheState = CACHE_S -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2203"
-		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2204"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].CacheState = CACHE_S -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2208"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2210"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2212"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2215"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2217"
-	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2218"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2219"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2222"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2226"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2228"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2229"
-	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2231"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2232"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2233"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2235"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2237"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2239"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2240"
-	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2242"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2244"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2248"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2251"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2252"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2253"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2258"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2259"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2261"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2262"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2263"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2264"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2265"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2267"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2268"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2270"
-	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2272"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2273"
-	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2274"
-	(Sta.Dir.HeadVld = false & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2278"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2281"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[j] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2284"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2285"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2287"
-	(Sta.Proc[i].ProcCmd != NODE_Get & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2290"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2291"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2293"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2294"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2295"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2298"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2299"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2300"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2303"
-	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2304"
-	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2305"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2306"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2307"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2308"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2310"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2311"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2312"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2313"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2314"
-	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2315"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2316"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2317"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2319"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2320"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2321"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2322"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2323"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2325"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2326"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2327"
-		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_Get & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2328"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2329"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2330"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2332"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2334"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2337"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2338"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2339"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2340"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2341"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2342"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2343"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2346"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2348"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2349"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2352"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2353"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2354"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_GetX & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2355"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2356"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_GetX & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2357"
-		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2358"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2359"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2361"
-	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2363"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2366"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2367"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2368"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2371"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2372"
-	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2373"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2374"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2377"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2379"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2380"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2387"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2388"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2389"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2390"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2391"
-		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2392"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2393"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2395"
-	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2396"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2397"
-	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = true -> Sta.Dir.HeadVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2398"
-	(Sta.Dir.HeadVld = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2402"
-	(Sta.Dir.HeadVld = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2403"
-	(Sta.Dir.HeadVld = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2404"
-	(Sta.Dir.Pending = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2405"
-	(Sta.Dir.HeadVld = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2415"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2417"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2418"
-	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2421"
-	(Sta.Dir.ShrVld = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2422"
-	(Sta.Dir.Pending = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrVld = true);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2424"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2426"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2429"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2430"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2431"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.Dir.InvSet[j] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2432"
-	(Sta.Dir.Pending = false & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2433"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2435"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2437"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2438"
-		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2439"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2449"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2452"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2453"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.InvSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2456"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2457"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2458"
-	(Sta.Dir.HeadVld = false & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2460"
-	(Sta.Dir.HeadVld = true & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2461"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.HeadVld = true -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2462"
-	(Sta.Dir.HeadVld = true & Sta.Dir.Pending = true -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2469"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2471"
-	(Sta.Dir.Pending = false & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2472"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.ShrVld = true -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2475"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2480"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[j] = true -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2481"
-	(Sta.Dir.ShrSet[i] = false & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2482"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2484"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2486"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2487"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2494"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2497"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2498"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Dir.InvSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2501"
-	(Sta.Dir.ShrSet[i] = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2502"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].CacheState = CACHE_I -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2512"
-	(Sta.Proc[i].CacheState != CACHE_I & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2513"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].CacheState != CACHE_I);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2515"
-	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState != CACHE_I -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2517"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2520"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2524"
-		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2528"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2529"
-	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2533"
-		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2535"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2536"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2537"
-	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2538"
-	(Sta.Proc[i].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[i].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2545"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2549"
-	(Sta.UniMsg[i].Cmd != UNI_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2550"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2551"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2552"
-	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2556"
-	(Sta.Proc[i].InvMarked = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd = UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2557"
-	(Sta.Proc[i].InvMarked = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2558"
-	(Sta.Proc[i].InvMarked = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2561"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2563"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2564"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2565"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2566"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2568"
-	(Sta.Dir.ShrSet[i] = true & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2570"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd = NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2572"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2573"
-	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd = UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2574"
-	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2575"
-	(Sta.UniMsg[i].Cmd != UNI_Get & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2576"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2578"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2579"
-	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2581"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2583"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2585"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2587"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2588"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2589"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2590"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2594"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd = UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2595"
-	(Sta.Dir.HeadVld = false & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2601"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd != UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2602"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].InvMarked = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2603"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2604"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2607"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2609"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[j] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2613"
-	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState = CACHE_S -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2614"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2615"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2617"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2618"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_None -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
 ruleset i : NODE do
-Invariant "rule_2620"
+Invariant "rule_1065"
 	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Cmd != UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2621"
+Invariant "rule_1066"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd = UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1069"
 	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_2623"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1073"
+		(i != j) ->	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1074"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.Dir.HeadPtr != i);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2624"
+Invariant "rule_1075"
 	(Sta.Proc[i].ProcCmd = NODE_Get & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2626"
-		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
+Invariant "rule_1076"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2628"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
+Invariant "rule_1077"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1078"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1079"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1081"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1082"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1083"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1085"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1087"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1088"
+	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1089"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd = UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1090"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1092"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1093"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1094"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1095"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1096"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1097"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1099"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1100"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1102"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd = NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1106"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_Get -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1112"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1114"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1115"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1116"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1117"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1119"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1121"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd != UNI_Get -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1122"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1124"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1125"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_Get & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1126"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1127"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1128"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1129"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1130"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1132"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1134"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1135"
+	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.Proc[j].ProcCmd != NODE_Get -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1141"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_Get);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2630"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+Invariant "rule_1146"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd = UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2632"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[i].Cmd != RP_Replace);
+Invariant "rule_1147"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1150"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1151"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1153"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1154"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1155"
+		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2633"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2634"
+Invariant "rule_1156"
 	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_2635"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.RpMsg[i].Cmd != RP_Replace);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1158"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1161"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1162"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1164"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Put & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1165"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1166"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1168"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1169"
+		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1171"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_PutX -> Sta.Proc[j].CacheState != CACHE_S);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2636"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.RpMsg[i].Cmd != RP_Replace);
+Invariant "rule_1172"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_PutX -> Sta.Proc[i].ProcCmd != NODE_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_2641"
+Invariant "rule_1173"
 	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_PutX -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_2650"
-	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2673"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.HeadVld = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2683"
-	(Sta.Proc[i].InvMarked = false & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2687"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2688"
-	(Sta.Proc[i].InvMarked = false & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2689"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.Proc[i].InvMarked = false);
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1178"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2694"
-		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+Invariant "rule_1179"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2696"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2698"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2703"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2706"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2708"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2709"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].InvMarked = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2710"
-	(Sta.Proc[i].InvMarked = false & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2715"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2716"
-	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].InvMarked = true);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2717"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2722"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.InvMsg[i].Cmd != INV_Inv);
+Invariant "rule_1181"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2726"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrVld = false);
+Invariant "rule_1182"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1184"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2731"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_1190"
+		(i != j) ->	(Sta.UniMsg[i].Cmd != UNI_PutX & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2733"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+Invariant "rule_1191"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd != UNI_PutX -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1193"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1194"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2736"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_1196"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2738"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
+Invariant "rule_1197"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1199"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2740"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
+Invariant "rule_1200"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_PutX);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2744"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_1207"
+		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset i : NODE ; j : NODE do
-Invariant "rule_2745"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2749"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2752"
-		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2754"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2755"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2756"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2757"
-	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2758"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].InvMarked = true);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2760"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2761"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2762"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2763"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2764"
-	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2765"
-	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2766"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2768"
-	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2769"
-	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2771"
-	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2772"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2774"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2775"
-	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2776"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2782"
-	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2783"
-	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_1208"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2784"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc = i);
+Invariant "rule_1209"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_2785"
-	(Sta.Proc[j].InvMarked = true & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2786"
-		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_1210"
+	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_2787"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+Invariant "rule_1211"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2788"
-		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2789"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_1213"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_2790"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].InvMarked = false);
+Invariant "rule_1215"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1216"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = j -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_2791"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2792"
-	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2794"
-	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2795"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2796"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2797"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2801"
-	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2802"
-		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2803"
-	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2804"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].InvMarked = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2805"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2806"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.WbMsg.Cmd != WB_Wb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2815"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2816"
-	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2818"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_Get -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2820"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_2821"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2827"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2829"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2843"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2846"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.Proc[i].ProcCmd != NODE_Get);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2848"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2853"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2855"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.UniMsg[i].Cmd != UNI_Put -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2862"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2865"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Dir.HeadPtr != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2873"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2874"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrVld = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2893"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2894"
-		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2895"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2909"
-	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2910"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2916"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2917"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2918"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2919"
-	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2921"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2922"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2925"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2926"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2927"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2928"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2929"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2930"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2931"
-	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2932"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2933"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2934"
-	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2935"
-	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState != CACHE_I -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2936"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2937"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2938"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2939"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2950"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2951"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2952"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2953"
-		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2954"
-	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2956"
-		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2963"
+Invariant "rule_1217"
 	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Proc = j -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2965"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Proc = i -> Sta.Dir.ShrSet[j] = false);
+Invariant "rule_1220"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1221"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2966"
+Invariant "rule_1223"
 		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2969"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
+Invariant "rule_1224"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
-ruleset j : NODE do
-Invariant "rule_2970"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2971"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_2972"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1225"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_2973"
+Invariant "rule_1226"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1227"
 		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1228"
+		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
 ruleset j : NODE do
-Invariant "rule_2974"
+Invariant "rule_1230"
 	(Sta.Proc[j].CacheState != CACHE_I & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2975"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2976"
-		(j != i) ->	(Sta.ShWbMsg.Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2986"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_2987"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_2990"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.ShWbMsg.Data = Sta.CurrData);
+ruleset j : NODE do
+Invariant "rule_1231"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_2996"
+Invariant "rule_1232"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1233"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1234"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1236"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1237"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1240"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1247"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1250"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1251"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.Proc[j].InvMarked = true -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1262"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1263"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1265"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1267"
+		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1268"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1270"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1272"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1275"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1277"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.ShrSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1286"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1287"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1288"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1289"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1290"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1292"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1293"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1294"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1295"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1297"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1298"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1299"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1300"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1301"
+	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1304"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1305"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1306"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1307"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1308"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1309"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1310"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1311"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1312"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1313"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1315"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1316"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1317"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1318"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1319"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1320"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1322"
+	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1323"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1324"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState != CACHE_I -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1325"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheState != CACHE_I -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1326"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1327"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1329"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1330"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.Dir.ShrSet[j] = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1331"
+	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1332"
+	(Sta.Dir.ShrSet[j] = true & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1335"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1338"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Dir.InvSet[i] = true -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1347"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1350"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1353"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1354"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1355"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1356"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1357"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1369"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Dir.ShrSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1370"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1372"
+	(Sta.Dir.ShrSet[j] = true & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1374"
+		(j != i) ->	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Nak -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1375"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1377"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1379"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1380"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.Dir.ShrSet[j] = true -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1383"
+	(Sta.Dir.ShrSet[j] = true & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1384"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1385"
+	(Sta.Dir.ShrSet[j] = true & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1389"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1390"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1392"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1393"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1395"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1396"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1397"
+	(Sta.Proc[i].ProcCmd = NODE_None & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1410"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1420"
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1421"
+	(Sta.Proc[i].CacheData != Sta.CurrData & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1423"
+	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1424"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1426"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1427"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1429"
+	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1443"
+	(Sta.Proc[i].ProcCmd != NODE_None & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1446"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1447"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1448"
+	(Sta.Dir.Local = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1449"
+	(Sta.Dir.Local = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1450"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1451"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1455"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1456"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1459"
+		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1460"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1465"
+		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1466"
+		(i != j) ->	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1469"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1470"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1471"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1472"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1473"
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1474"
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1475"
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1476"
+	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1477"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1479"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1480"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1481"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1482"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1485"
+	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1486"
+	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1487"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1488"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1489"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].InvMarked = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1490"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1492"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].InvMarked = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1493"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1495"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1498"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1499"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1500"
+	(Sta.Dir.ShrVld = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1501"
+	(Sta.Dir.ShrVld = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1502"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1503"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.MemData != Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1504"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1505"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1506"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1508"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1509"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1510"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1511"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1512"
+	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1514"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1515"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1516"
+	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1517"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1518"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1519"
+	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1521"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1523"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1524"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1525"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1526"
+	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1530"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1531"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1594"
+		(i != j) ->	(Sta.UniMsg[i].Data != Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1595"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Data != Sta.CurrData -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1601"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1602"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1605"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1607"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1608"
+		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1609"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.HeadVld = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1610"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1612"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1613"
+		(j != i) ->	(Sta.ShWbMsg.Proc != j & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1614"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1615"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1617"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Proc != j -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1618"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1619"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1620"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1621"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1622"
+		(j != i) ->	(Sta.Dir.Dirty = false & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1623"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1624"
+		(j != i) ->	(Sta.WbMsg.Cmd = WB_Wb & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1625"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1627"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Proc != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1628"
+	(Sta.Proc[j].CacheState != CACHE_E & Sta.Proc[j].CacheState != CACHE_I -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1629"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1630"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1631"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Proc[j].CacheState != CACHE_I -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1632"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1633"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1637"
+	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1638"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1641"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1644"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1646"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadPtr != i -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1647"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1649"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1650"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1652"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1653"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1655"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1657"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_FAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1660"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1661"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1664"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1665"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1666"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1668"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1669"
+		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1670"
+	(Sta.Dir.HeadVld = false & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1671"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1672"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1673"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1675"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1676"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc != j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1677"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.ShWbMsg.Proc != j -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1678"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc = j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1679"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc = j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1680"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc = j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1682"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc = j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1683"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1684"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1685"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1686"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1687"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1688"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1689"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1690"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1692"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1693"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1694"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1695"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1696"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1697"
+		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.HeadPtr != i -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1698"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.Dirty = false -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1699"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1700"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.WbMsg.Cmd = WB_Wb -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1701"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1702"
+		(i != j) ->	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.HeadPtr != i -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1703"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.Dir.Dirty = false -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1704"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1705"
+	(Sta.ShWbMsg.Cmd = SHWB_FAck & Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1706"
+	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1707"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1708"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1709"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1710"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1711"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1716"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1717"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1720"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1723"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1725"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.HeadPtr = i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1726"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1728"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1729"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1731"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1732"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1734"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1737"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_FAck -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1739"
+		(j != i) ->	(Sta.Dir.Pending = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1740"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.Pending = false -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1741"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.Dir.Pending = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1742"
+	(Sta.Dir.HeadVld = false & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1743"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = false -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1744"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = true -> Sta.Dir.Pending = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1747"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Pending = false -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1748"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Dir.Pending = false -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1749"
+		(j != i) ->	(Sta.Dir.Pending = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1750"
+		(j != i) ->	(Sta.Dir.Pending = false & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1762"
+	(Sta.Dir.Pending = false & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1763"
+	(Sta.Dir.Pending = false & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1764"
+	(Sta.Dir.ShrSet[i] = false & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1765"
+	(Sta.Dir.Dirty = true & Sta.Dir.Pending = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1768"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = false -> Sta.Dir.ShrVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1769"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = false -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1770"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = false -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1771"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = false -> Sta.Dir.Dirty = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1773"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Pending = false -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1774"
+		(i != j) ->	(Sta.Dir.Pending = false & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1787"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1788"
+	(Sta.Dir.Local = false & Sta.Dir.Pending = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1789"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = true -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1790"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = false -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1791"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Pending = true -> Sta.Dir.HeadVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1794"
+	(Sta.Dir.Pending = true & Sta.Dir.HeadVld = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1797"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1798"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1808"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1809"
+	(Sta.Dir.InvSet[i] = true & Sta.MemData != Sta.CurrData -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1810"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1811"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Dirty = true -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1813"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.Pending = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1823"
+		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1824"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1826"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1828"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1829"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1830"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1831"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1832"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1833"
+		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1834"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1835"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1836"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1837"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1838"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1839"
+	(Sta.UniMsg[j].Cmd != UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1840"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd != UNI_Get -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1841"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1843"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1844"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1849"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Data != Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1852"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1853"
+		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1854"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1856"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1858"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1860"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1861"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1862"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1863"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1864"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1865"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1866"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1867"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1868"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1869"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1870"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1871"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1872"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1873"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1874"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1875"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1876"
+		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1877"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1878"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1879"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1880"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1881"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1882"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1884"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Get);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1885"
+	(Sta.UniMsg[j].Cmd = UNI_Get & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1886"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1888"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1892"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_Get -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1895"
+	(Sta.Dir.Local = false & Sta.Dir.HeadVld = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1896"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1898"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1899"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1900"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1903"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1904"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1907"
+	(Sta.Dir.Local = false & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1908"
+	(Sta.Dir.Local = false & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1909"
+	(Sta.Dir.Local = false & Sta.Dir.ShrSet[i] = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1910"
+	(Sta.Dir.Local = false & Sta.Dir.Dirty = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1913"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.Dir.ShrVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1914"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1915"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1916"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Local = false -> Sta.Dir.Dirty = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1918"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1929"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1930"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1931"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.Local = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1940"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = false -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1943"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1944"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Dir.Local = true -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1945"
+		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1946"
+		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1947"
+		(j != i) ->	(Sta.Dir.Local = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1948"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1950"
+	(Sta.Dir.Local = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1953"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1954"
+	(Sta.Dir.InvSet[i] = true & Sta.MemData != Sta.CurrData -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1955"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_1956"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Dirty = true -> Sta.Dir.Local = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1958"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1959"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1965"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1966"
+		(i != j) ->	(Sta.Dir.Local = true & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1967"
+	(Sta.Dir.Local = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1974"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1976"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1977"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1978"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1979"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1980"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1981"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1982"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1983"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1984"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1985"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_1986"
+		(j != i) ->	(Sta.Proc[j].ProcCmd = NODE_None & Sta.ShWbMsg.Proc != i -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_1987"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1988"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1989"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd = NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1992"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_1994"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2002"
 	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Data = Sta.CurrData);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_3001"
-		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3003"
-		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3005"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3010"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3011"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.ShWbMsg.Data = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3019"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+Invariant "rule_2004"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
 endruleset;
 
 
 ruleset j : NODE do
-Invariant "rule_3025"
+Invariant "rule_2006"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2007"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = j -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2008"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2009"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2010"
+		(i != j) ->	(Sta.ShWbMsg.Proc != i & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2011"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2012"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_None -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2014"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2016"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2020"
+	(Sta.Proc[j].CacheData != Sta.CurrData & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2025"
 	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_None);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_3037"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2030"
+		(j != i) ->	(Sta.Dir.HeadVld = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2031"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadVld = false -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2033"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.RpMsg[j].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3042"
-	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+Invariant "rule_2036"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = false -> Sta.Dir.HeadVld = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3043"
+Invariant "rule_2037"
+	(Sta.Dir.InvSet[i] = true & Sta.MemData != Sta.CurrData -> Sta.Dir.HeadVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2038"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.HeadVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2039"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.Dirty = true -> Sta.Dir.HeadVld = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2066"
+		(i != j) ->	(Sta.Dir.HeadVld = false & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2067"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadVld = false -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2070"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadVld = false -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2084"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2087"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2088"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2091"
+	(Sta.Dir.HeadVld = true & Sta.Dir.ShrVld = false -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2092"
+	(Sta.Dir.HeadVld = true & Sta.MemData != Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2093"
+	(Sta.Dir.ShrSet[i] = false & Sta.Dir.HeadVld = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2094"
+	(Sta.Dir.Dirty = true & Sta.Dir.HeadVld = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2097"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = true -> Sta.Dir.ShrVld = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2098"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = true -> Sta.MemData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2099"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = true -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2100"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.HeadVld = true -> Sta.Dir.Dirty = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2139"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2144"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2149"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.HeadVld = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2162"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = j -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2166"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2167"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2169"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2170"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2171"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2172"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2173"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2174"
+		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2178"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2182"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2186"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2209"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2213"
+		(i != j) ->	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2214"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2216"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2218"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2223"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.InvSet[j] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2226"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2228"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.ShWbMsg.Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2232"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2233"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2234"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2235"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2236"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2237"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2238"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2239"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2240"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2241"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2243"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2244"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2245"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2246"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2247"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2248"
+		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2257"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2263"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = false & Sta.Dir.InvSet[j] = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2266"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.Dir.InvSet[j] = true -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2298"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2303"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2305"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2307"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2312"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2344"
+	(Sta.Dir.InvSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2346"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2347"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2349"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2351"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2352"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2354"
 	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_3047"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.Dir.ShrSet[i] = false);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2364"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
-ruleset i : NODE do
-Invariant "rule_3050"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.Dir.ShrSet[i] = false);
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2367"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2371"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_3051"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrSet[i] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3052"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.ShrSet[i] = false);
+Invariant "rule_2376"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_GetX);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3054"
+Invariant "rule_2381"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2383"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2384"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2385"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2387"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2389"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2390"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2391"
+	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2400"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2402"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2405"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2406"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2411"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2412"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2417"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2418"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_GetX & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2419"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2420"
+		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2421"
+		(j != i) ->	(Sta.Proc[j].ProcCmd != NODE_GetX & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2422"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2424"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2425"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2426"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2428"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2429"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2432"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2433"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2434"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2435"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2436"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2437"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2438"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2439"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2440"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2441"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2442"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Proc = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2443"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2444"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2445"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2447"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2448"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2449"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Proc = i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2450"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2451"
+		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2452"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2453"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2454"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2455"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2456"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2457"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2458"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2459"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2460"
+		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2461"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2464"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2465"
+		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2468"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2469"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2470"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2471"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2472"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2473"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2474"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2475"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2476"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2477"
+		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2478"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2479"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2482"
+		(j != i) ->	(Sta.Dir.Dirty = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2483"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2484"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2485"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2486"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2487"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2493"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2494"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2498"
+		(j != i) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2501"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2502"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2503"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2504"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2506"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2508"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2509"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2510"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2511"
+		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2513"
+		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2514"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Proc != i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2515"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc != i -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2516"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2517"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2518"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2519"
+		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2520"
+		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Proc != i -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2521"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.ShrVld = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2522"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2523"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2524"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2525"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2526"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2529"
+		(j != i) ->	(Sta.Dir.ShrVld = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2531"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2532"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2533"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2534"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_InvAck & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2535"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2536"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2538"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Dirty = false -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2539"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2540"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2547"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2551"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.UniMsg[j].Proc != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2555"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].CacheState = CACHE_I -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2562"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2563"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2566"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2571"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[j].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2579"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2580"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2586"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2587"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_I);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2589"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2590"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2596"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2597"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2598"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2599"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2604"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2611"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2613"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2615"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2616"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2617"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2619"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2622"
+	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2625"
+		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.Proc[j].CacheState != CACHE_S -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2629"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2632"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2633"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2636"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2639"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2641"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].InvMarked = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2646"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2648"
+	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2649"
+	(Sta.UniMsg[j].Cmd = UNI_PutX & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2651"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2652"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2655"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2660"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2663"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2667"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2668"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2670"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2671"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2673"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2674"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2675"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2677"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2678"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2682"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2683"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.RpMsg[j].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2689"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2693"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2694"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2697"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2699"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2702"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2704"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2705"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2709"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2712"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2714"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2715"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd != NODE_GetX -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2716"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2718"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2720"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2725"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2726"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2729"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2734"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2735"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2737"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2738"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2739"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2741"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2742"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2744"
+	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2745"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2748"
+		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2749"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2750"
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2752"
+	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2755"
+	(Sta.Proc[i].ProcCmd = NODE_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2756"
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2761"
+	(Sta.Dir.ShrSet[i] = false & Sta.Dir.ShrVld = true -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2763"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2764"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.InvSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2767"
+	(Sta.Dir.InvSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2771"
+	(Sta.Dir.InvSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2772"
+	(Sta.Dir.InvSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2777"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrSet[i] = false -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2779"
+	(Sta.Dir.InvSet[i] = true & Sta.Dir.ShrVld = true -> Sta.Dir.ShrSet[i] = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2781"
+		(i != j) ->	(Sta.Dir.InvSet[i] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2782"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2783"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd != UNI_Get -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2785"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd != UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2786"
+	(Sta.Proc[i].InvMarked = true & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2787"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2789"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2791"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2792"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2794"
+	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2802"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2805"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2809"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2810"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2815"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[i].Cmd != UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2816"
+	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2818"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2820"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd = UNI_Get);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2821"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2822"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2823"
+		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2825"
 	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3057"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.Dir.ShrSet[i] = false);
+Invariant "rule_2827"
+	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2828"
+	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2829"
+	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2837"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2839"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2842"
+		(i != j) ->	(Sta.Dir.HeadPtr = i & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2843"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2848"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2849"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2850"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Put & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2851"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2856"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2857"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2859"
+	(Sta.InvMsg[i].Cmd = INV_InvAck & Sta.Proc[i].InvMarked = false -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2860"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2862"
+	(Sta.UniMsg[i].Cmd != UNI_Put & Sta.Proc[i].InvMarked = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2863"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2871"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2875"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2880"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2881"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2888"
+	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Proc[i].InvMarked = false -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2890"
+	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].InvMarked = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2891"
+	(Sta.Proc[i].InvMarked = true & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2892"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2893"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2898"
+	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2902"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2907"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2908"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2910"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2911"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Cmd = UNI_Put -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2912"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2913"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Put & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2919"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Proc[i].CacheState != CACHE_E);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2922"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_E & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2923"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2924"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.Proc[j].InvMarked = true -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2926"
+	(Sta.Proc[i].ProcCmd = NODE_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2928"
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2929"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2931"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2932"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2934"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2936"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2939"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2940"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2941"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2942"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2943"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2944"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2945"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2946"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2948"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2950"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2951"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2952"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2954"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2956"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2958"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2959"
+	(Sta.Proc[j].CacheState = CACHE_S & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2962"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].CacheData != Sta.CurrData -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2963"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_2964"
+	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Data = Sta.CurrData);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2965"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[j].InvMarked = true -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2971"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Dir.HeadPtr = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2975"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_2980"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2981"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2983"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2984"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2985"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_2986"
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2989"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].InvMarked = true -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_2990"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3000"
+	(Sta.Proc[i].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3004"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3009"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.Proc[i].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3010"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].InvMarked = true -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3012"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3013"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].InvMarked = true -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3014"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3015"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3017"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3018"
+	(Sta.Proc[i].InvMarked = true & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3019"
+		(i != j) ->	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3020"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3021"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].InvMarked = true -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3022"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].InvMarked = true -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3023"
+	(Sta.Proc[i].InvMarked = true & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3024"
+	(Sta.Proc[i].InvMarked = true & Sta.InvMsg[i].Cmd = INV_Inv -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3026"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3027"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3028"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3030"
+	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].InvMarked = false);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3034"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3035"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3036"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[j].InvMarked = true -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3037"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3038"
+		(j != i) ->	(Sta.Proc[j].InvMarked = true & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3039"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[j].InvMarked = true -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3041"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].InvMarked = true -> Sta.UniMsg[j].Cmd = UNI_Put);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3051"
+	(Sta.Proc[i].CacheState = CACHE_I & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3052"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3054"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Proc[i].CacheData = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3055"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].CacheState != CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3058"
+	(Sta.Proc[i].ProcCmd = NODE_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_3059"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].ProcCmd != NODE_None);
+	(Sta.Proc[i].ProcCmd = NODE_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_3060"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].ProcCmd = NODE_Get);
+	(Sta.Proc[i].ProcCmd = NODE_GetX & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
-ruleset j : NODE ; i : NODE do
+ruleset i : NODE do
+Invariant "rule_3061"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
 Invariant "rule_3062"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[j].Proc != i);
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
 endruleset;
 
 
-ruleset i : NODE ; j : NODE do
+ruleset i : NODE do
 Invariant "rule_3063"
-		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3064"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.RpMsg[j].Cmd != RP_Replace);
+	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_GetX);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_3067"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_Get);
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.ShrSet[i] = false);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3068"
+Invariant "rule_3069"
 	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[i].CacheData = Sta.CurrData);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_3070"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.Dir.ShrSet[i] = true -> Sta.UniMsg[i].Cmd != UNI_GetX);
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3075"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.InvMsg[i].Cmd != INV_Inv);
+Invariant "rule_3071"
+	(Sta.Dir.HeadPtr = i & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
 endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_3072"
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3076"
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
 Invariant "rule_3077"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.InvMsg[i].Cmd != INV_InvAck);
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3078"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3079"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Proc != j);
 endruleset;
 
 
 ruleset i : NODE do
 Invariant "rule_3080"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd = NODE_None -> Sta.Proc[i].CacheData = Sta.CurrData);
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3090"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
+Invariant "rule_3081"
+	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.ShWbMsg.Data = Sta.CurrData);
 endruleset;
 
 
 ruleset i : NODE do
-Invariant "rule_3092"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3096"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].CacheData != Sta.CurrData -> Sta.Proc[i].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3103"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3107"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3108"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3109"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3113"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3114"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3118"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[i].Data = Sta.CurrData -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3120"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[i].ProcCmd = NODE_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3129"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3131"
-	(Sta.UniMsg[i].Data = Sta.CurrData & Sta.Proc[i].ProcCmd != NODE_Get -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3138"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3139"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3140"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Dir.Pending = false -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3141"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Dir.Pending = true);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3142"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3143"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3144"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3145"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.Proc[i].CacheState != CACHE_S);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3146"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3147"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3148"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3149"
-		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_GetX & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3151"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3152"
-		(j != i) ->	(Sta.Dir.Pending = false & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3153"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3154"
-		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3155"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3156"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3159"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3160"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3161"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3162"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.InvSet[j] = true -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3163"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3164"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3165"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3166"
-	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3167"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3168"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Cmd != UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3171"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3172"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_None -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3173"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3174"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3178"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3179"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3182"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3183"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3184"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc = i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3185"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Data = Sta.CurrData);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3186"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3187"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.UniMsg[j].Proc != i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE do
-Invariant "rule_3188"
-	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3197"
-		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.UniMsg[i].Cmd != UNI_PutX);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3198"
-		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3203"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3204"
-		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3207"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3208"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3209"
-		(j != i) ->	(Sta.ShWbMsg.Proc = j & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3210"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3221"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3222"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3223"
-		(j != i) ->	(Sta.Dir.InvSet[j] = true & Sta.UniMsg[j].Proc = i -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3224"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Dir.InvSet[j] = true -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3225"
-		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3227"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3228"
-		(j != i) ->	(Sta.ShWbMsg.Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3238"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3239"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Dir.InvSet[j] = false);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3240"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc = i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3241"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd = UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3242"
-		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3243"
-		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3244"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.ShWbMsg.Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3245"
-		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3246"
-		(j != i) ->	(Sta.UniMsg[j].Proc != i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3247"
-		(j != i) ->	(Sta.UniMsg[j].Cmd != UNI_Put & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3248"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Proc = i -> Sta.UniMsg[j].Cmd != UNI_Put);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3252"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3253"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].CacheState = CACHE_I);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3255"
-		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[j].CacheState != CACHE_I -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3256"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3257"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3258"
-		(j != i) ->	(Sta.Proc[j].CacheState != CACHE_I & Sta.RpMsg[j].Cmd = RP_Replace -> Sta.InvMsg[i].Cmd != INV_InvAck);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3261"
-		(j != i) ->	(Sta.ShWbMsg.Proc = j & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3262"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Proc != j);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3263"
-		(j != i) ->	(Sta.ShWbMsg.Cmd = SHWB_ShWb & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3264"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3265"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.ShWbMsg.Proc = i);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3266"
-		(i != j) ->	(Sta.ShWbMsg.Proc != i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3267"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.Proc[j].ProcCmd = NODE_None -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3268"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.Proc[j].ProcCmd = NODE_None -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3269"
-		(j != i) ->	(Sta.ShWbMsg.Proc = j & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3270"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3271"
-		(i != j) ->	(Sta.ShWbMsg.Proc != i & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3272"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.Proc[j].ProcCmd != NODE_None);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3285"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3287"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Get -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3290"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3292"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[i].Cmd != UNI_Get);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3297"
+Invariant "rule_3082"
 	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
 endruleset;
 
 
 ruleset i : NODE do
+Invariant "rule_3084"
+	(Sta.ShWbMsg.Data != Sta.CurrData & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3139"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3140"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrVld = false);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3142"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.ShrVld = true -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3151"
+	(Sta.UniMsg[j].Cmd != UNI_PutX & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3154"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.UniMsg[j].Cmd = UNI_PutX);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3155"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3157"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Data != Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3160"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3161"
+	(Sta.UniMsg[j].Cmd = UNI_Nak & Sta.Proc[j].CacheData = Sta.CurrData -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3164"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].CacheState = CACHE_I);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3167"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3168"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3169"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState != CACHE_I -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3171"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3172"
+	(Sta.Proc[i].CacheState != CACHE_S & Sta.Proc[i].CacheState != CACHE_I -> Sta.InvMsg[i].Cmd != INV_Inv);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3176"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[i].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3177"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Proc[i].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3178"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.UniMsg[i].Proc = j -> Sta.Proc[i].ProcCmd = NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3180"
+		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3181"
+		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3182"
+	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3183"
+		(i != j) ->	(Sta.Proc[i].ProcCmd != NODE_GetX & Sta.UniMsg[i].Proc = j -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3184"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3185"
+		(i != j) ->	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].ProcCmd != NODE_GetX -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3188"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.ShWbMsg.Data != Sta.CurrData -> Sta.UniMsg[j].Cmd != UNI_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3192"
+	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[j].Cmd = UNI_GetX -> Sta.ShWbMsg.Data = Sta.CurrData);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3195"
+	(Sta.Proc[i].CacheState = CACHE_S & Sta.Dir.HeadPtr = i -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3199"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3200"
+		(i != j) ->	(Sta.Proc[i].CacheState = CACHE_S & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3205"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.Proc[i].CacheState = CACHE_S -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3210"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3213"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.NakcMsg.Cmd != NAKC_Nakc);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3214"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Dir.HeadPtr = i -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3218"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.RpMsg[i].Cmd = RP_Replace -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3219"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3224"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3225"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3227"
+	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3228"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3229"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.Proc[i].CacheState = CACHE_S -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3234"
+		(j != i) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3235"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Proc = j -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3238"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.NakcMsg.Cmd = NAKC_Nakc -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3239"
+		(i != j) ->	(Sta.NakcMsg.Cmd = NAKC_Nakc & Sta.UniMsg[i].Proc = j -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3240"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Proc[i].CacheState = CACHE_S -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3241"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.ShrSet[i] = false);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3244"
+	(Sta.RpMsg[i].Cmd = RP_Replace & Sta.Dir.ShrSet[i] = true -> Sta.Proc[i].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE do
+Invariant "rule_3245"
+	(Sta.Dir.ShrSet[i] = true & Sta.Proc[i].CacheState = CACHE_S -> Sta.RpMsg[i].Cmd != RP_Replace);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3246"
+		(i != j) ->	(Sta.Dir.ShrSet[i] = true & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3250"
+		(i != j) ->	(Sta.Dir.Dirty = false & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3251"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3252"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.ShWbMsg.Proc != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3253"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3255"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3257"
+		(i != j) ->	(Sta.UniMsg[i].Cmd = UNI_Nak & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3258"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Cmd != UNI_Nak);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3259"
+		(j != i) ->	(Sta.UniMsg[j].Cmd = UNI_Put & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3260"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.UniMsg[j].Cmd != UNI_Put);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3261"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3263"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3264"
+		(i != j) ->	(Sta.ShWbMsg.Data = Sta.CurrData & Sta.Dir.HeadPtr = i -> Sta.UniMsg[i].Proc != j);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3266"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.HeadPtr = i -> Sta.Proc[j].CacheState != CACHE_S);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3267"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.Dir.Dirty = false -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3268"
+		(i != j) ->	(Sta.ShWbMsg.Proc = i & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3270"
+		(j != i) ->	(Sta.Proc[j].CacheData = Sta.CurrData & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3272"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3273"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Cmd = UNI_Put -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3274"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3276"
+		(j != i) ->	(Sta.Proc[j].CacheState = CACHE_S & Sta.UniMsg[i].Proc = j -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
+Invariant "rule_3277"
+		(i != j) ->	(Sta.UniMsg[i].Proc = j & Sta.ShWbMsg.Data = Sta.CurrData -> Sta.Dir.HeadPtr != i);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3279"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Dir.Dirty = false -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3280"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.Dir.Dirty = true);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3281"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_InvAck);
+endruleset;
+
+
+ruleset j : NODE ; i : NODE do
+Invariant "rule_3284"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.InvMsg[i].Cmd = INV_InvAck -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3291"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.WbMsg.Cmd != WB_Wb);
+endruleset;
+
+
+ruleset j : NODE do
+Invariant "rule_3292"
+	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.WbMsg.Cmd = WB_Wb -> Sta.Proc[j].ProcCmd != NODE_GetX);
+endruleset;
+
+
+ruleset i : NODE ; j : NODE do
 Invariant "rule_3298"
-	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.Proc[i].CacheData = Sta.CurrData -> Sta.UniMsg[i].Cmd != UNI_GetX);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3301"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3302"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3305"
-	(Sta.Proc[i].CacheState = CACHE_S & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.Proc[i].CacheData = Sta.CurrData);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3309"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3310"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[i].Cmd != UNI_GetX);
+		(i != j) ->	(Sta.InvMsg[i].Cmd = INV_Inv & Sta.UniMsg[j].Data = Sta.CurrData -> Sta.Proc[j].ProcCmd != NODE_GetX);
 endruleset;
 
 
 ruleset j : NODE ; i : NODE do
-Invariant "rule_3311"
-		(j != i) ->	(Sta.UniMsg[j].Proc = i & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.RpMsg[j].Cmd != RP_Replace);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3312"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.ShWbMsg.Cmd = SHWB_ShWb -> Sta.UniMsg[j].Proc != i);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3313"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE do
-Invariant "rule_3314"
-	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_GetX -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset j : NODE ; i : NODE do
-Invariant "rule_3315"
-		(j != i) ->	(Sta.RpMsg[j].Cmd = RP_Replace & Sta.UniMsg[j].Proc = i -> Sta.ShWbMsg.Cmd != SHWB_ShWb);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3320"
-		(i != j) ->	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[j].Proc = i -> Sta.UniMsg[i].Cmd != UNI_Nak);
-endruleset;
-
-
-ruleset i : NODE ; j : NODE do
-Invariant "rule_3321"
-		(i != j) ->	(Sta.Proc[i].CacheData = Sta.CurrData & Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.UniMsg[j].Proc != i);
+Invariant "rule_3304"
+		(j != i) ->	(Sta.UniMsg[j].Data = Sta.CurrData & Sta.Proc[j].ProcCmd = NODE_GetX -> Sta.InvMsg[i].Cmd != INV_Inv);
 endruleset;
