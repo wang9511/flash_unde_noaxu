@@ -2100,29 +2100,29 @@ rule "n_ABS_NI_InvAck_311_NODE_1"
 	end
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.Pending = false &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.HeadVld = true &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.Dir.ShrVld = true &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.Local = true &
 		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.Dir.ShrVld = true &
 		Sta.Dir.ShrVld = false &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.Dir.Pending = false &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Dir.Local = true &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2139,29 +2139,29 @@ rule "n_ABS_NI_InvAck_212_NODE_1"
 	end
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.Pending = false &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.HeadVld = true &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.Dir.ShrVld = true &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.Local = true &
 		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.Dir.ShrVld = true &
 		Sta.Dir.ShrVld = false &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.Dir.Pending = false &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Dir.Local = true &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2179,27 +2179,27 @@ rule "n_ABS_NI_InvAck_113_NODE_1"
 	end
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrVld = true &
+		Sta.Dir.ShrVld = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.MemData = Sta.CurrData &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr = NODE_1 &
 		Sta.Dir.Pending = false &
 		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
 		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.HeadVld = true &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.ShrVld = true &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Dir.ShrVld = false &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2216,32 +2216,32 @@ rule "n_ABS_NI_InvAck_exists14_NODE_1"
 	false
  	& 
 	forall NODE_1 : NODE do
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Dir.ShrVld = true &
+		Sta.Dir.ShrVld = false &
+		Sta.Dir.ShrSet[NODE_2] = true &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr = NODE_1 &
 		Sta.Dir.Pending = false &
 		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
 		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.ShrVld = true &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.ShrSet[NODE_2] = true &
+		Sta.Dir.Dirty = false &
 		Sta.Dir.Local = true &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.ShrVld = false &
-		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2290,33 +2290,33 @@ rule "n_ABS_NI_Remote_GetX_PutX_Home24_NODE_1"
 	Sta.HomeUniMsg.HomeProc = false
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2332,40 +2332,40 @@ rule "n_ABS_NI_Remote_GetX_PutX25_NODE_1"
 	Sta.UniMsg[NODE_2].HomeProc = false
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.ShWbMsg.Proc = NODE_1 &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
 		Sta.Dir.Local = false &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.ShWbMsg.Proc = NODE_1 &
-		Sta.Dir.ShrVld = false &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2385,44 +2385,44 @@ rule "n_ABS_NI_Remote_GetX_PutX25_NODE_2"
 	Sta.Proc[NODE_1].CacheState = CACHE_E
  	& 
 	forall NODE_2 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Dir.Local = false &
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_1].ProcCmd = NODE_None &
+		Sta.Dir.Dirty = true &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
-		Sta.Proc[NODE_1].ProcCmd = NODE_None &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
-		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S &
+		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2436,59 +2436,59 @@ endruleset;
 
 rule "n_ABS_NI_Remote_GetX_PutX25_NODE_1_NODE_2"
 
-		forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.Dir.InvSet[NODE_1] = false &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_1].ProcCmd = NODE_None &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.ShWbMsg.Proc = NODE_1 &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
 		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.Proc[NODE_1].ProcCmd = NODE_None &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.ShWbMsg.Proc = NODE_1 &
-		Sta.Dir.ShrVld = false &
-		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_1].InvMarked = false &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.Proc[NODE_1].InvMarked = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S &
+		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -2503,10 +2503,10 @@ rule "n_ABS_NI_Remote_GetX_Nak_Home26_NODE_1"
 	Sta.HomeUniMsg.HomeProc = false
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv
+		Sta.Dir.HeadPtr != NODE_1
 	end
 ==>
 begin
@@ -2522,30 +2522,30 @@ rule "n_ABS_NI_Remote_GetX_Nak27_NODE_1"
 	Sta.UniMsg[NODE_2].HomeProc = false
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.Local = false &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.ShrVld = false &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false
 	end
 ==>
 begin
@@ -2564,29 +2564,29 @@ rule "n_ABS_NI_Remote_GetX_Nak27_NODE_2"
 	Sta.Proc[NODE_1].CacheState != CACHE_E
  	& 
 	forall NODE_2 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Dir.Local = false &
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
 		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S
 	end
 ==>
 begin
@@ -2597,41 +2597,41 @@ endruleset;
 
 rule "n_ABS_NI_Remote_GetX_Nak27_NODE_1_NODE_2"
 
-		forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.Dir.InvSet[NODE_1] = false &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
 		Sta.Dir.ShrVld = false &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S
 	end
 ==>
 begin
@@ -2644,20 +2644,20 @@ rule "n_ABS_NI_Local_GetX_PutX_1128_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.CacheState = CACHE_E
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -2689,24 +2689,24 @@ rule "n_ABS_NI_Local_GetX_PutX_1029_NODE_1"
 	Sta.Dir.Local = false
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
 		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -2749,17 +2749,17 @@ rule "n_ABS_NI_Local_GetX_PutX_1029_NODE_2"
 	Sta.Dir.Local = false
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_1 &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Proc[NODE_1].CacheState != CACHE_E &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -2796,29 +2796,29 @@ rule "n_ABS_NI_Local_GetX_PutX_1029_NODE_1_NODE_2"
 	Sta.Dir.HomeHeadPtr = false &
 	Sta.Dir.Local = false
  	& 
-	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+	forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.MemData = Sta.CurrData
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Proc != NODE_1
 	end
 ==>
 begin
@@ -2853,18 +2853,18 @@ rule "n_ABS_NI_Local_GetX_PutX_10_Home30_NODE_1"
 	Sta.Dir.HomeShrSet &
 	Sta.Dir.Local = false
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -2903,21 +2903,21 @@ rule "n_ABS_NI_Local_GetX_PutX_931_NODE_1"
 	Sta.Dir.Local = false
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadVld = false &
 		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadVld = false &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -2955,18 +2955,18 @@ rule "n_ABS_NI_Local_GetX_PutX_932_NODE_1"
 	Sta.Dir.HomeHeadPtr = true &
 	Sta.Dir.Local = false
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3011,24 +3011,24 @@ rule "n_ABS_NI_Local_GetX_PutX_8_NODE_Get33_NODE_1"
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
 		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -3079,17 +3079,17 @@ rule "n_ABS_NI_Local_GetX_PutX_8_NODE_Get33_NODE_2"
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
 		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_1 &
 		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_1].CacheState != CACHE_E
 	end
 ==>
 begin
@@ -3134,29 +3134,29 @@ rule "n_ABS_NI_Local_GetX_PutX_8_NODE_Get33_NODE_1_NODE_2"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
-	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+	forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.MemData = Sta.CurrData
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Proc != NODE_1
 	end
 ==>
 begin
@@ -3203,24 +3203,24 @@ rule "n_ABS_NI_Local_GetX_PutX_834_NODE_1"
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
 		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -3270,17 +3270,17 @@ rule "n_ABS_NI_Local_GetX_PutX_834_NODE_2"
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
 		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_1 &
 		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_1].CacheState != CACHE_E
 	end
 ==>
 begin
@@ -3324,29 +3324,29 @@ rule "n_ABS_NI_Local_GetX_PutX_834_NODE_1_NODE_2"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
-	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+	forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.MemData = Sta.CurrData
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Proc[NODE_2].ProcCmd = NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Proc != NODE_1
 	end
 ==>
 begin
@@ -3388,18 +3388,18 @@ rule "n_ABS_NI_Local_GetX_PutX_8_Home_NODE_Get35_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3442,18 +3442,18 @@ rule "n_ABS_NI_Local_GetX_PutX_8_Home36_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3494,21 +3494,21 @@ rule "n_ABS_NI_Local_GetX_PutX_7_NODE_Get37_NODE_1"
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadVld = false &
 		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadVld = false &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3549,18 +3549,18 @@ rule "n_ABS_NI_Local_GetX_PutX_7_NODE_Get38_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3602,21 +3602,21 @@ rule "n_ABS_NI_Local_GetX_PutX_739_NODE_1"
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
 	forall NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadVld = false &
 		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadVld = false &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3656,18 +3656,18 @@ rule "n_ABS_NI_Local_GetX_PutX_740_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3711,18 +3711,18 @@ rule "n_ABS_NI_Local_GetX_PutX_641_NODE_1"
     Sta.Dir.ShrSet[NODE_2] = false
 	end
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3754,18 +3754,18 @@ rule "n_ABS_NI_Local_GetX_PutX_542_NODE_1"
     Sta.Dir.ShrSet[NODE_2] = false
 	end
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3797,18 +3797,18 @@ rule "n_ABS_NI_Local_GetX_PutX_443_NODE_1"
     Sta.Dir.ShrSet[NODE_2] = false
 	end
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3834,21 +3834,21 @@ rule "n_ABS_NI_Local_GetX_PutX_344_NODE_1"
 	Sta.Dir.HeadVld = false &
 	Sta.Dir.Local = false
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.MemData = Sta.CurrData &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3874,21 +3874,21 @@ rule "n_ABS_NI_Local_GetX_PutX_245_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd != NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.MemData = Sta.CurrData &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3914,21 +3914,21 @@ rule "n_ABS_NI_Local_GetX_PutX_146_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.ProcCmd = NODE_Get
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.MemData = Sta.CurrData &
+		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -3955,22 +3955,22 @@ rule "n_ABS_NI_Local_GetX_GetX47_NODE_1"
 	Sta.Dir.HeadPtr != Other
  	& 
 	forall NODE_2 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadVld = false &
 		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadVld = false &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -3984,20 +3984,20 @@ rule "n_ABS_NI_Local_GetX_GetX48_NODE_1"
 	Sta.Dir.HomeHeadPtr = true
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -4022,33 +4022,33 @@ rule "n_ABS_NI_Remote_Get_Put_Home52_NODE_1"
 	Sta.HomeUniMsg.HomeProc = false
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4064,41 +4064,41 @@ rule "n_ABS_NI_Remote_Get_Put53_NODE_1"
 	Sta.UniMsg[NODE_2].HomeProc = false
  	& 
 	forall NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
 		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.ShWbMsg.Proc = NODE_1 &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.Local = false &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.ShWbMsg.Proc = NODE_1 &
-		Sta.Dir.ShrVld = false &
+		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4119,44 +4119,44 @@ rule "n_ABS_NI_Remote_Get_Put53_NODE_2"
 	Sta.Proc[NODE_1].CacheState = CACHE_E
  	& 
 	forall NODE_2 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Dir.Local = false &
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_1].ProcCmd = NODE_None &
+		Sta.Dir.Dirty = true &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
-		Sta.Proc[NODE_1].ProcCmd = NODE_None &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
-		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S &
+		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4171,60 +4171,60 @@ endruleset;
 
 rule "n_ABS_NI_Remote_Get_Put53_NODE_1_NODE_2"
 
-		forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.Proc[NODE_1].CacheState != CACHE_E &
-		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
-		Sta.Dir.HeadPtr = NODE_2 &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		forall NODE_1 : NODE; NODE_2 : NODE do
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_1].ProcCmd = NODE_None &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Get &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Proc[NODE_1].ProcCmd = NODE_None &
 		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.ShWbMsg.Proc = NODE_1 &
-		Sta.Dir.ShrVld = false &
-		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_1].InvMarked = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
 		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.ShWbMsg.Proc = NODE_1 &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.Proc[NODE_1].ProcCmd != NODE_GetX &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
+		Sta.Proc[NODE_1].ProcCmd != NODE_Get &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Proc[NODE_1].InvMarked = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_1].CacheState != CACHE_E &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
+		Sta.Dir.HeadPtr = NODE_1 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_GetX &
+		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Nak &
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S &
+		Sta.Proc[NODE_1].CacheData = Sta.CurrData &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4240,10 +4240,10 @@ rule "n_ABS_NI_Remote_Get_Nak_Home54_NODE_1"
 	Sta.HomeUniMsg.HomeProc = false
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr != NODE_2 &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv
+		Sta.Dir.HeadPtr != NODE_1
 	end
 ==>
 begin
@@ -4259,30 +4259,30 @@ rule "n_ABS_NI_Remote_Get_Nak55_NODE_1"
 	Sta.UniMsg[NODE_2].HomeProc = false
  	& 
 	forall NODE_1 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
 		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
+		Sta.Dir.ShrVld = false &
+		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.Local = false &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.ShrVld = false &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
+		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false
 	end
 ==>
 begin
@@ -4301,29 +4301,29 @@ rule "n_ABS_NI_Remote_Get_Nak55_NODE_2"
 	Sta.Proc[NODE_1].CacheState != CACHE_E
  	& 
 	forall NODE_2 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Dir.Local = false &
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
 		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S
 	end
 ==>
 begin
@@ -4335,40 +4335,40 @@ endruleset;
 rule "n_ABS_NI_Remote_Get_Nak55_NODE_1_NODE_2"
 
 		forall NODE_1 : NODE; NODE_2 : NODE do
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.ShrSet[NODE_1] = false &
-		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
-		Sta.Dir.Pending = true &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.Dirty = false &
-		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
-		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
-		Sta.Proc[NODE_2].ProcCmd != NODE_None &
-		Sta.Proc[NODE_1].CacheState = CACHE_I &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.Proc[NODE_1].CacheState != CACHE_S &
-		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.Dir.InvSet[NODE_1] = false &
+		Sta.Dir.Pending = true &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.InvMsg[NODE_1].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Dir.ShrSet[NODE_1] = false &
+		Sta.ShWbMsg.Proc != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.UniMsg[NODE_1].Cmd != UNI_PutX &
 		Sta.UniMsg[NODE_1].Proc != NODE_2 &
-		Sta.ShWbMsg.Proc != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.UniMsg[NODE_1].Cmd != UNI_Put &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
+		Sta.Proc[NODE_2].ProcCmd != NODE_None &
 		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_1].Cmd != INV_InvAck &
+		Sta.RpMsg[NODE_2].Cmd != RP_Replace &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.MemData = Sta.CurrData &
 		Sta.Proc[NODE_1].InvMarked = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Proc[NODE_1].CacheState = CACHE_I &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Proc[NODE_2].ProcCmd = NODE_Get &
+		Sta.Proc[NODE_2].ProcCmd != NODE_GetX &
+		Sta.Dir.HeadVld = false &
+		Sta.Dir.Dirty = false &
+		Sta.Proc[NODE_1].CacheState != CACHE_S
 	end
 ==>
 begin
@@ -4381,20 +4381,20 @@ rule "n_ABS_NI_Local_Get_Put_Dirty56_NODE_1"
 	Sta.Dir.Local = true &
 	Sta.HomeProc.CacheState = CACHE_E
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -4411,21 +4411,21 @@ rule "n_ABS_NI_Local_Get_Put57_NODE_1"
 	Sta.Dir.Dirty = false &
 	Sta.Dir.HeadVld = false
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
-		Sta.Dir.HeadPtr != NODE_1 &
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.Dir.InvSet[NODE_2] = false &
 		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
 		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
-		Sta.Proc[NODE_2].CacheState != CACHE_E &
 		Sta.MemData = Sta.CurrData &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadPtr != NODE_1 &
+		Sta.Proc[NODE_2].CacheState != CACHE_E &
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -4439,18 +4439,18 @@ rule "n_ABS_NI_Local_Get_Put_Head58_NODE_1"
 	Sta.Dir.Dirty = false &
 	Sta.Dir.HeadVld
  	& 
-	forall NODE_1 : NODE; NODE_2 : NODE do
+	forall NODE_2 : NODE; NODE_1 : NODE do
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.MemData = Sta.CurrData &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.MemData = Sta.CurrData
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck
 	end
 ==>
 begin
@@ -4472,22 +4472,22 @@ rule "n_ABS_NI_Local_Get_Get59_NODE_1"
 	Sta.Dir.HeadPtr != Other
  	& 
 	forall NODE_2 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.NakcMsg.Cmd != NAKC_Nakc &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.Dir.InvSet[NODE_2] = false &
 		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.ShWbMsg.Proc != NODE_2 &
 		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.HeadVld = false &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
+		Sta.Dir.ShrSet[NODE_2] = false &
 		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.NakcMsg.Cmd != NAKC_Nakc &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.Dir.HeadVld = false &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -4501,20 +4501,20 @@ rule "n_ABS_NI_Local_Get_Get60_NODE_1"
 	Sta.Dir.HomeHeadPtr = true
  	& 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
+		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
-		Sta.Dir.HeadPtr != NODE_2 &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Dir.ShrVld = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.Dir.ShrVld = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].InvMarked = false
 	end
 ==>
 begin
@@ -4543,33 +4543,33 @@ endrule;
 rule "n_ABS_PI_Remote_PutX71_NODE_1"
 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4591,33 +4591,33 @@ ruleset DATA_1 : DATA do
 rule "n_ABS_Store86_NODE_1"
 
 	forall NODE_2 : NODE; NODE_1 : NODE do
-		Sta.Proc[NODE_2].InvMarked = false &
-		Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Pending = true &
-		Sta.Dir.InvSet[NODE_2] = false &
-		Sta.Proc[NODE_2].CacheState = CACHE_I &
-		Sta.UniMsg[NODE_2].Proc != NODE_1 &
-		Sta.Dir.Dirty = true &
-		Sta.ShWbMsg.Proc != NODE_2 &
-		Sta.Dir.HeadVld = true &
-		Sta.ShWbMsg.Cmd = SHWB_FAck &
-		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
+		Sta.Dir.HeadPtr = NODE_2 &
 		Sta.Dir.HeadPtr != NODE_1 &
-		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
-		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
-		Sta.Dir.Local = false &
-		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
-		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Proc[NODE_2].CacheState != CACHE_E &
-		Sta.WbMsg.Cmd != WB_Wb &
-		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.Dirty = true &
+		Sta.Proc[NODE_2].InvMarked = false &
 		Sta.Dir.HeadPtr != NODE_2 &
+		Sta.Proc[NODE_2].CacheState != CACHE_S &
 		Sta.ShWbMsg.Proc = NODE_1 &
 		Sta.Dir.ShrVld = false &
+		Sta.ShWbMsg.Cmd = SHWB_FAck &
+		Sta.UniMsg[NODE_2].Cmd != UNI_PutX &
+		Sta.Dir.ShrSet[NODE_2] = false &
+		Sta.ShWbMsg.Cmd != SHWB_FAck &
+		Sta.ShWbMsg.Cmd != SHWB_ShWb &
+		Sta.ShWbMsg.Proc != NODE_2 &
+		Sta.InvMsg[NODE_2].Cmd != INV_InvAck &
+		Sta.Proc[NODE_2].CacheState = CACHE_I &
+		Sta.UniMsg[NODE_2].Cmd != UNI_Put &
+		Sta.WbMsg.Cmd != WB_Wb &
+		Sta.Dir.InvSet[NODE_2] = false &
+		Sta.Dir.Local = false &
+		Sta.InvMsg[NODE_2].Cmd != INV_Inv &
 		Sta.Dir.HeadPtr = NODE_1 &
-		Sta.Proc[NODE_2].CacheState != CACHE_S &
-		Sta.Dir.ShrSet[NODE_2] = false
+		Sta.UniMsg[NODE_2].Proc != NODE_1 &
+		Sta.Dir.HeadVld = true
 	end
 ==>
 begin
@@ -4627,7 +4627,7 @@ endruleset;
 
 
 
-ruleset j : NODE do
+ruleset i : NODE do
 Invariant "rule_1"
-	(Sta.Dir.InvSet[j] = true -> Sta.Dir.Dirty = false);
+	(Sta.UniMsg[i].Cmd = UNI_Nak -> Sta.Dir.HeadPtr != i);
 endruleset;
