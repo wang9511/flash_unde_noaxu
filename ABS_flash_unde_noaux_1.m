@@ -2408,8 +2408,7 @@ endruleset;
 
 rule "n_ABS_NI_Remote_GetX_Nak27_NODE_1_NODE_2"
 
-	Other != Other
- 	& Sta.ShWbMsg.Cmd != SHWB_ShWb &
+	Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.Local = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Dir.Pending = true &
