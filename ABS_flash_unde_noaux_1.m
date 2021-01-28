@@ -2150,8 +2150,7 @@ rule "n_ABS_NI_InvAck_113_NODE_1"
 	Sta.Dir.Dirty = false &
 	Sta.Dir.HomeInvSet = false
 	& forall NODE_2 : NODE do
-			false |
-    Sta.Dir.InvSet[NODE_2] = false
+	    Sta.Dir.InvSet[NODE_2] = false
 	end
  	& Sta.ShWbMsg.Cmd != SHWB_ShWb &
 		Sta.Dir.HeadVld = false &
@@ -2176,8 +2175,7 @@ rule "n_ABS_NI_InvAck_exists14_NODE_1"
 	Sta.InvMsg[NODE_2].Cmd = INV_InvAck &
 	Sta.Dir.Pending = true &
 	Sta.Dir.InvSet[NODE_2] = true &
-	false
- 	& Sta.Dir.HeadVld = false &
+	Sta.Dir.HeadVld = false &
 		Sta.ShWbMsg.Cmd != SHWB_FAck &
 		Sta.Dir.Local = true &
 		Sta.NakcMsg.Cmd != NAKC_Nakc &
@@ -2514,7 +2512,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false & ((Sta.Dir.ShrVld & Sta.Dir.ShrSet[p]) | ((Sta.Dir.HeadVld & Sta.Dir.HeadPtr = p) & Sta.Dir.HomeHeadPtr = false)))) then
+	if ((((Sta.Dir.ShrVld & Sta.Dir.ShrSet[p]) | ((Sta.Dir.HeadVld & Sta.Dir.HeadPtr = p) & Sta.Dir.HomeHeadPtr = false)))) then
       Sta.Dir.InvSet[p] := true ;
 	Sta.InvMsg[p].Cmd := INV_Inv ;
 	else
@@ -2552,7 +2550,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false & ((Sta.Dir.ShrVld & Sta.Dir.ShrSet[p]) | ((Sta.Dir.HeadVld & Sta.Dir.HeadPtr = p) & Sta.Dir.HomeHeadPtr = false)))) then
+	if ((((Sta.Dir.ShrVld & Sta.Dir.ShrSet[p]) | ((Sta.Dir.HeadVld & Sta.Dir.HeadPtr = p) & Sta.Dir.HomeHeadPtr = false)))) then
       Sta.Dir.InvSet[p] := true ;
 	Sta.InvMsg[p].Cmd := INV_Inv ;
 	else
@@ -2584,8 +2582,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2619,8 +2616,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2654,8 +2650,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2746,8 +2741,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2792,8 +2786,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2885,8 +2878,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
-    ((Sta.Dir.ShrVld &
+	if ((((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
     Sta.Dir.HeadPtr = p) &
@@ -2930,7 +2922,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -2969,7 +2961,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3009,7 +3001,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3046,7 +3038,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3084,7 +3076,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3122,7 +3114,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3159,7 +3151,7 @@ begin
 	Sta.Dir.ShrVld := false ;
 	for p : NODE do
     Sta.Dir.ShrSet[p] := false ;
-	if ((false &
+	if ((
     ((Sta.Dir.ShrVld &
     Sta.Dir.ShrSet[p]) |
     ((Sta.Dir.HeadVld &
@@ -3603,11 +3595,7 @@ rule "n_ABS_NI_Local_Get_Put_Head58_NODE_1"
 begin
 	Sta.Dir.ShrVld := true ;
 	for p : NODE do
-    if (false) then
-      Sta.Dir.InvSet[p] := true ;
-	else
       Sta.Dir.InvSet[p] := Sta.Dir.ShrSet[p] ;
-	end ;
 	end ;
 	Sta.Dir.HomeInvSet := Sta.Dir.HomeShrSet;
 endrule;
