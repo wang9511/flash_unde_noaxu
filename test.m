@@ -142,7 +142,17 @@ startstate "Init"
     Sta.UniMsg[p].Cmd := UNI_None;
     Sta.InvMsg[p].Cmd := INV_None;
     Sta.RpMsg[p].Cmd := RP_None;
+    Sta.UniMsg[p].HomeProc := false;
   end;
+  Sta.HomeUniMsg.Cmd := UNI_None;
+  Sta.HomeInvMsg.Cmd := INV_None;
+  Sta.HomeRpMsg.Cmd := RP_None;
+  Sta.HomeProc.ProcCmd := NODE_None;
+  Sta.HomeProc.InvMarked := false;
+  Sta.HomeProc.CacheState := CACHE_I;
+  Sta.Dir.HomeShrSet := false;
+  Sta.Dir.HomeInvSet := false;
+  Sta.Dir.HomeHeadPtr := false;
   Sta.CurrData := d;
   Sta.PrevData := d;
   Sta.LastWrVld := false;
