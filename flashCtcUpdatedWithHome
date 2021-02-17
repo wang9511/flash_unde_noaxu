@@ -144,6 +144,7 @@ startstate "Init"
     Sta.RpMsg[p].Cmd := RP_None;
     Sta.UniMsg[p].HomeProc := false;
   end;
+  Sta.HomeUniMsg.HomeProc := false;
   Sta.HomeUniMsg.Cmd := UNI_None;
   Sta.HomeInvMsg.Cmd := INV_None;
   Sta.HomeRpMsg.Cmd := RP_None;
@@ -361,6 +362,9 @@ begin
         NxtSta.InvMsg[p].Cmd := INV_None;
       end;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
+    NxtSta.HomeInvMsg.Cmd := INV_None;
     NxtSta.Collecting := true;
     NxtSta.PrevData := Sta.CurrData;
     NxtSta.LastOtherInvAck := Sta.Dir.HeadPtr;
@@ -569,6 +573,7 @@ begin
       NxtSta.Dir.ShrSet[src] := true;
       for p : NODE do
         NxtSta.Dir.InvSet[p] := (p = src) | Sta.Dir.ShrSet[p];
+        NxtSta.Dir.HomeInvSet := (p = src) | Sta.Dir.HomeShrSet;
       end;
     else
       NxtSta.Dir.HeadVld := true;
@@ -736,13 +741,15 @@ begin
       NxtSta.Dir.ShrSet[p] := false;
       NxtSta.Dir.InvSet[p] := false;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
     NxtSta.UniMsg[src].Cmd := UNI_PutX;
     NxtSta.UniMsg[src].HomeProc := true;
     NxtSta.UniMsg[src].Data := Sta.HomeProc.CacheData;
     NxtSta.HomeProc.CacheState := CACHE_I;
     undefine NxtSta.HomeProc.CacheData;
   elsif (Sta.Dir.HeadVld ->
-         Sta.Dir.HeadPtr = src  &
+         Sta.Dir.HeadPtr = src  & !Sta.Dir.HomeShrSet
          forall p : NODE do p != src -> !Sta.Dir.ShrSet[p] end) then
     NxtSta.Dir.Local := false;
     NxtSta.Dir.Dirty := true;
@@ -753,6 +760,8 @@ begin
       NxtSta.Dir.ShrSet[p] := false;
       NxtSta.Dir.InvSet[p] := false;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
     NxtSta.UniMsg[src].Cmd := UNI_PutX;
     NxtSta.UniMsg[src].HomeProc := true;
     NxtSta.UniMsg[src].Data := Sta.MemData;
@@ -784,6 +793,9 @@ begin
         NxtSta.InvMsg[p].Cmd := INV_None;
       end;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
+    NxtSta.HomeInvMsg.Cmd := INV_None;
     NxtSta.UniMsg[src].Cmd := UNI_PutX;
     NxtSta.UniMsg[src].HomeProc := true;
     NxtSta.UniMsg[src].Data := Sta.MemData;
@@ -1771,3 +1783,4 @@ begin
 --
   Sta := NxtSta;
 endrule;
+
