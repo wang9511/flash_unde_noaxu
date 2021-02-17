@@ -1485,7 +1485,7 @@ begin
     undefine NxtSta.HomeProc.CacheData;
   elsif (Sta.Dir.HeadVld ->
          ---Sta.Dir.HeadPtr = Other  
-         & !Sta.Dir.HomeShrSet &
+         !Sta.Dir.HomeShrSet &
          forall p : NODE do !Sta.Dir.ShrSet[p] end) then
     NxtSta.Dir.Local := false;
     NxtSta.Dir.Dirty := true;
