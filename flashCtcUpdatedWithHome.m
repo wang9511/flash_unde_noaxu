@@ -749,7 +749,7 @@ begin
     NxtSta.HomeProc.CacheState := CACHE_I;
     undefine NxtSta.HomeProc.CacheData;
   elsif (Sta.Dir.HeadVld ->
-         Sta.Dir.HeadPtr = src  & !Sta.Dir.HomeShrSet
+         Sta.Dir.HeadPtr = src  & !Sta.Dir.HomeShrSet &
          forall p : NODE do p != src -> !Sta.Dir.ShrSet[p] end) then
     NxtSta.Dir.Local := false;
     NxtSta.Dir.Dirty := true;
