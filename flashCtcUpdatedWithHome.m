@@ -153,7 +153,6 @@ startstate "Init"
   Sta.HomeProc.CacheState := CACHE_I;
   Sta.Dir.HomeShrSet := false;
   Sta.Dir.HomeInvSet := false;
-  Sta.Dir.HomeHeadPtr := false;
   Sta.CurrData := d;
   Sta.PrevData := d;
   Sta.LastWrVld := false;
@@ -1198,8 +1197,10 @@ ruleset data : DATA do
 rule "ABS_Store"
   Sta.Dir.Dirty & Sta.WbMsg.Cmd != WB_Wb & Sta.ShWbMsg.Cmd != SHWB_ShWb &
   forall p : NODE do Sta.Proc[p].CacheState != CACHE_E end &
+  Sta.HomeProc.CacheState != CACHE_E &
   Sta.HomeUniMsg.Cmd != UNI_Put &
-  forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end  -- by Lemma_1
+  forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end & -- by Lemma_1
+  Sta.HomeUniMsg.Cmd != UNI_PutX
 ==>
 var NxtSta : STATE;
 begin
@@ -1216,8 +1217,10 @@ endruleset;
 rule "ABS_PI_Remote_PutX"
   Sta.Dir.Dirty & Sta.WbMsg.Cmd != WB_Wb & Sta.ShWbMsg.Cmd != SHWB_ShWb &
   forall p : NODE do Sta.Proc[p].CacheState != CACHE_E end &
+  Sta.HomeProc.CacheState != CACHE_E &
   Sta.HomeUniMsg.Cmd != UNI_Put &
-  forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end  -- by Lemma_1
+  forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end & -- by Lemma_1
+  Sta.HomeUniMsg.Cmd != UNI_PutX
 ==>
 var NxtSta : STATE;
 begin
@@ -1476,10 +1479,13 @@ begin
       NxtSta.Dir.ShrSet[p] := false;
       NxtSta.Dir.InvSet[p] := false;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
     NxtSta.HomeProc.CacheState := CACHE_I;
     undefine NxtSta.HomeProc.CacheData;
   elsif (Sta.Dir.HeadVld ->
-         ---Sta.Dir.HeadPtr = Other  &
+         ---Sta.Dir.HeadPtr = Other  
+         & !Sta.Dir.HomeShrSet &
          forall p : NODE do !Sta.Dir.ShrSet[p] end) then
     NxtSta.Dir.Local := false;
     NxtSta.Dir.Dirty := true;
@@ -1490,6 +1496,8 @@ begin
       NxtSta.Dir.ShrSet[p] := false;
       NxtSta.Dir.InvSet[p] := false;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
     NxtSta.HomeProc.CacheState := CACHE_I;
     undefine NxtSta.HomeProc.CacheData;
     if (Sta.Dir.Local) then
@@ -1517,6 +1525,9 @@ begin
         NxtSta.InvMsg[p].Cmd := INV_None;
       end;
     end;
+    NxtSta.Dir.HomeShrSet := false;
+    NxtSta.Dir.HomeInvSet := false;
+    NxtSta.HomeInvMsg.Cmd := INV_None;
     if (Sta.Dir.Local) then
       NxtSta.HomeProc.CacheState := CACHE_I;
       undefine NxtSta.HomeProc.CacheData;
