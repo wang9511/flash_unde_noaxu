@@ -1175,6 +1175,11 @@ invariant "CacheDataProp"
     ( Sta.Proc[p].CacheState = CACHE_S ->
       ( Sta.Collecting -> Sta.Proc[p].CacheData = Sta.PrevData ) &
       (!Sta.Collecting -> Sta.Proc[p].CacheData = Sta.CurrData ) )
+    & Sta.HomeProc.CacheState = CACHE_E ->
+      Sta.HomeProc.CacheData = Sta.CurrData
+    & ( Sta.HomeProc.CacheState = CACHE_S ->
+      ( Sta.Collecting -> Sta.HomeProc.CacheData = Sta.PrevData ) &
+      (!Sta.Collecting -> Sta.HomeProc.CacheData = Sta.CurrData ) )
   end;
 
 invariant "MemDataProp"
@@ -1795,3 +1800,75 @@ begin
   Sta := NxtSta;
 endrule;
 
+
+invariant "Lemma_1"
+  forall h : NODE do forall dst : NODE do
+    Sta.Proc[dst].CacheState = CACHE_E ->
+    Sta.Dir.Dirty & Sta.WbMsg.Cmd != WB_Wb & Sta.ShWbMsg.Cmd != SHWB_ShWb &
+    forall p : NODE do p != dst -> Sta.Proc[p].CacheState != CACHE_E end &
+    Sta.HomeProc.CacheState != CACHE_E &
+    Sta.HomeUniMsg.Cmd != UNI_Put &
+    forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end
+  end end;
+
+invariant "Lemma_1_Home"
+  forall h : NODE do forall dst : NODE do
+    Sta.HomeProc.CacheState = CACHE_E ->
+    Sta.Dir.Dirty & Sta.WbMsg.Cmd != WB_Wb & Sta.ShWbMsg.Cmd != SHWB_ShWb &
+    forall p : NODE do Sta.Proc[p].CacheState != CACHE_E end &
+    Sta.HomeUniMsg.Cmd != UNI_Put &
+    forall q : NODE do Sta.UniMsg[q].Cmd != UNI_PutX end
+  end end;
+
+
+invariant "Lemma_2"
+  forall h : NODE do forall src : NODE do forall dst : NODE do
+    src != dst &
+    Sta.UniMsg[src].Cmd = UNI_Get & Sta.UniMsg[src].Proc = dst ->
+    Sta.Dir.Pending & !Sta.Dir.Local &
+    Sta.PendReqSrc = src & Sta.FwdCmd = UNI_Get
+  end end end;
+
+invariant "Lemma_2_Home"
+  forall h : NODE do forall src : NODE do forall dst : NODE do
+    src != dst &
+    Sta.HomeUniMsg.Cmd = UNI_Get & Sta.HomeUniMsg.Proc = dst ->
+    Sta.Dir.Pending & !Sta.Dir.Local &
+    Sta.PendReqSrc = src & Sta.FwdCmd = UNI_Get
+  end end end;
+
+invariant "Lemma_3"
+  forall h : NODE do forall src : NODE do forall dst : NODE do
+    src != dst &
+    Sta.UniMsg[src].Cmd = UNI_GetX & Sta.UniMsg[src].Proc = dst ->
+    Sta.Dir.Pending & !Sta.Dir.Local &
+    Sta.PendReqSrc = src & Sta.FwdCmd = UNI_GetX
+  end end end;
+
+invariant "Lemma_3_Home"
+  forall h : NODE do forall src : NODE do forall dst : NODE do
+    src != dst &
+    Sta.HomeUniMsg.Cmd = UNI_GetX & Sta.HomeUniMsg.Proc = dst ->
+    Sta.Dir.Pending & !Sta.Dir.Local &
+    Sta.PendReqSrc = src & Sta.FwdCmd = UNI_GetX
+  end end end;
+
+
+invariant "Lemma_4"
+  forall h : NODE do forall p : NODE do
+    Sta.InvMsg[p].Cmd = INV_InvAck ->
+    Sta.Dir.Pending & Sta.Collecting &
+    Sta.NakcMsg.Cmd = NAKC_None & Sta.ShWbMsg.Cmd = SHWB_None &
+    forall q : NODE do
+      ( Sta.UniMsg[q].Cmd = UNI_Get | Sta.UniMsg[q].Cmd = UNI_GetX ->
+        Sta.UniMsg[q].HomeProc = true ) &
+      ( Sta.UniMsg[q].Cmd = UNI_PutX ->
+        Sta.UniMsg[q].HomeProc = true & Sta.PendReqSrc = q )
+    end
+  end end;
+
+invariant "Lemma_5"
+  forall p : NODE do
+    (Sta.Proc[p].CacheState = CACHE_E -> Sta.Proc[p].CacheData = Sta.CurrData) &
+    (Sta.HomeProc.CacheState = CACHE_E -> Sta.HomeProc.CacheData = Sta.CurrData)
+  end;
