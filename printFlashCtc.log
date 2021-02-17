@@ -44,9 +44,20 @@ Memory usage:
 	   * Change the constant gPercentActiveStates in mu_prolog.inc
 	     to increase this, if necessary.
 
+Progress Report:
+
+	1000 states explored in 2.60s, with 3587 rules fired and 603 states in the queue.
+	2000 states explored in 2.64s, with 7537 rules fired and 1104 states in the queue.
+	3000 states explored in 2.68s, with 11595 rules fired and 1560 states in the queue.
+	4000 states explored in 2.73s, with 15861 rules fired and 1982 states in the queue.
+	5000 states explored in 2.77s, with 20122 rules fired and 2352 states in the queue.
+	6000 states explored in 2.82s, with 24309 rules fired and 2865 states in the queue.
+	7000 states explored in 2.85s, with 27871 rules fired and 3320 states in the queue.
+	8000 states explored in 2.90s, with 32137 rules fired and 3723 states in the queue.
+
 The following is the error trace for the error:
 
-	Invariant "MemDataProp" failed.
+	Invariant "CacheDataProp" failed.
 
 Startstate Init, h:NODE_1, d:DATA_1 fired.
 Sta.Proc[NODE_1].ProcCmd:NODE_None
@@ -67,7 +78,7 @@ Sta.Dir.InvSet[NODE_1]:false
 Sta.Dir.InvSet[NODE_2]:false
 Sta.Dir.ShrSet[NODE_1]:false
 Sta.Dir.ShrSet[NODE_2]:false
-Sta.Dir.HomeHeadPtr:false
+Sta.Dir.HomeHeadPtr:Undefined
 Sta.Dir.HomeShrSet:false
 Sta.Dir.HomeInvSet:false
 Sta.Dir.HomeUniMsg:Undefined
@@ -99,7 +110,7 @@ Sta.HomeProc.CacheState:CACHE_I
 Sta.HomeProc.CacheData:Undefined
 Sta.HomeUniMsg.Cmd:UNI_None
 Sta.HomeUniMsg.Proc:Undefined
-Sta.HomeUniMsg.HomeProc:Undefined
+Sta.HomeUniMsg.HomeProc:false
 Sta.HomeUniMsg.Data:Undefined
 Sta.HomeInvMsg.Cmd:INV_None
 Sta.HomeRpMsg.Cmd:RP_None
@@ -116,32 +127,76 @@ Sta.LastInvAck:Undefined
 Sta.LastOtherInvAck:Undefined
 ----------
 
-Rule PI_Local_GetX_PutX fired.
-Sta.Dir.Local:true
+Rule PI_Remote_GetX, src:NODE_1 fired.
+Sta.Proc[NODE_1].ProcCmd:NODE_GetX
+Sta.UniMsg[NODE_1].Cmd:UNI_GetX
+Sta.UniMsg[NODE_1].HomeProc:true
+----------
+
+Rule NI_Local_GetX_PutX, src:NODE_1 fired.
 Sta.Dir.Dirty:true
-Sta.HomeProc.CacheState:CACHE_E
+Sta.Dir.HeadVld:true
+Sta.Dir.HeadPtr:NODE_1
+Sta.UniMsg[NODE_1].Cmd:UNI_PutX
+Sta.UniMsg[NODE_1].Data:DATA_1
+----------
+
+Rule NI_Remote_PutX, dst:NODE_1 fired.
+Sta.Proc[NODE_1].ProcCmd:NODE_None
+Sta.Proc[NODE_1].CacheState:CACHE_E
+Sta.Proc[NODE_1].CacheData:DATA_1
+Sta.UniMsg[NODE_1].Cmd:UNI_None
+Sta.UniMsg[NODE_1].Data:Undefined
+----------
+
+Rule PI_Local_Get_Get fired.
+Sta.Dir.Pending:true
+Sta.HomeProc.ProcCmd:NODE_Get
+Sta.HomeUniMsg.Cmd:UNI_Get
+Sta.HomeUniMsg.Proc:NODE_1
+Sta.PendReqCmd:UNI_Get
+----------
+
+Rule NI_Remote_Get_Put_Home, dst:NODE_1, src:NODE_2 fired.
+Sta.Proc[NODE_1].CacheState:CACHE_S
+Sta.HomeUniMsg.Cmd:UNI_Put
+Sta.HomeUniMsg.Data:DATA_1
+Sta.FwdSrc:NODE_2
+----------
+
+Rule NI_Local_Put fired.
+Sta.Dir.Pending:false
+Sta.Dir.Local:true
+Sta.Dir.Dirty:false
+Sta.HomeProc.ProcCmd:NODE_None
+Sta.HomeProc.CacheState:CACHE_S
 Sta.HomeProc.CacheData:DATA_1
+Sta.HomeUniMsg.Cmd:UNI_None
+Sta.HomeUniMsg.Proc:Undefined
+Sta.HomeUniMsg.Data:Undefined
+----------
+
+Rule ABS_NI_Local_GetX_PutX fired.
+Sta.Dir.Local:false
+Sta.Dir.Dirty:true
+Sta.Dir.HeadPtr:Other
+Sta.HomeProc.CacheState:CACHE_I
+Sta.HomeProc.CacheData:Undefined
 ----------
 
 Rule ABS_Store, data:DATA_2 fired.
-Sta.CurrData:DATA_2
-Sta.LastWrVld:true
-Sta.LastWrPtr:Other
-----------
-
-Rule ABS_NI_Local_Get_Put fired.
 The last state of the trace (in full) is:
 Sta.Proc[NODE_1].ProcCmd:NODE_None
 Sta.Proc[NODE_1].InvMarked:false
-Sta.Proc[NODE_1].CacheState:CACHE_I
-Sta.Proc[NODE_1].CacheData:Undefined
+Sta.Proc[NODE_1].CacheState:CACHE_S
+Sta.Proc[NODE_1].CacheData:DATA_1
 Sta.Proc[NODE_2].ProcCmd:NODE_None
 Sta.Proc[NODE_2].InvMarked:false
 Sta.Proc[NODE_2].CacheState:CACHE_I
 Sta.Proc[NODE_2].CacheData:Undefined
 Sta.Dir.Pending:false
-Sta.Dir.Local:true
-Sta.Dir.Dirty:false
+Sta.Dir.Local:false
+Sta.Dir.Dirty:true
 Sta.Dir.HeadVld:true
 Sta.Dir.HeadPtr:Other
 Sta.Dir.ShrVld:false
@@ -149,14 +204,14 @@ Sta.Dir.InvSet[NODE_1]:false
 Sta.Dir.InvSet[NODE_2]:false
 Sta.Dir.ShrSet[NODE_1]:false
 Sta.Dir.ShrSet[NODE_2]:false
-Sta.Dir.HomeHeadPtr:false
+Sta.Dir.HomeHeadPtr:Undefined
 Sta.Dir.HomeShrSet:false
 Sta.Dir.HomeInvSet:false
 Sta.Dir.HomeUniMsg:Undefined
 Sta.MemData:DATA_1
 Sta.UniMsg[NODE_1].Cmd:UNI_None
 Sta.UniMsg[NODE_1].Proc:Undefined
-Sta.UniMsg[NODE_1].HomeProc:false
+Sta.UniMsg[NODE_1].HomeProc:true
 Sta.UniMsg[NODE_1].Data:Undefined
 Sta.UniMsg[NODE_2].Cmd:UNI_None
 Sta.UniMsg[NODE_2].Proc:Undefined
@@ -177,11 +232,11 @@ Sta.ShWbMsg.Data:Undefined
 Sta.NakcMsg.Cmd:NAKC_None
 Sta.HomeProc.ProcCmd:NODE_None
 Sta.HomeProc.InvMarked:false
-Sta.HomeProc.CacheState:CACHE_S
-Sta.HomeProc.CacheData:DATA_1
+Sta.HomeProc.CacheState:CACHE_I
+Sta.HomeProc.CacheData:Undefined
 Sta.HomeUniMsg.Cmd:UNI_None
 Sta.HomeUniMsg.Proc:Undefined
-Sta.HomeUniMsg.HomeProc:Undefined
+Sta.HomeUniMsg.HomeProc:false
 Sta.HomeUniMsg.Data:Undefined
 Sta.HomeInvMsg.Cmd:INV_None
 Sta.HomeRpMsg.Cmd:RP_None
@@ -190,10 +245,10 @@ Sta.PrevData:DATA_1
 Sta.LastWrVld:true
 Sta.LastWrPtr:Other
 Sta.PendReqSrc:Undefined
-Sta.PendReqCmd:Undefined
+Sta.PendReqCmd:UNI_Get
 Sta.Collecting:false
 Sta.FwdCmd:UNI_None
-Sta.FwdSrc:Undefined
+Sta.FwdSrc:NODE_2
 Sta.LastInvAck:Undefined
 Sta.LastOtherInvAck:Undefined
 ----------
@@ -204,11 +259,11 @@ End of the error trace.
 
 Result:
 
-	Invariant "MemDataProp" failed.
+	Invariant "CacheDataProp" failed.
 
 State Space Explored:
 
-	127 states, 341 rules fired in 2.60s.
+	8092 states, 32390 rules fired in 2.90s.
 
 Analysis of State Space:
 
