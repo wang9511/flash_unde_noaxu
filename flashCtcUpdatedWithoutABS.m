@@ -1050,7 +1050,7 @@ endrule;
 endruleset;
 
 ruleset src : NODE do
-rule "NI_Replace"
+rule "NI_Replace_Home"
   Sta.HomeRpMsg.Cmd = RP_Replace
 ==>
 var NxtSta : STATE;
