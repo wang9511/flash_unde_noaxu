@@ -208,7 +208,7 @@ begin
 --
   NxtSta.Proc[src].ProcCmd := NODE_Get;
   NxtSta.UniMsg[src].Cmd := UNI_Get;
-  NxtSta.HomeUniMsg.HomeProc := true;
+  NxtSta.UniMsg[src].HomeProc := true;
   undefine NxtSta.UniMsg[src].Data;
 --
   Sta := NxtSta;
